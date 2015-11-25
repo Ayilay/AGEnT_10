@@ -6,9 +6,7 @@
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
- * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
- * copies of the Software, and to permit persons to whom the Software is
- * furnished to do so, subject to the following conditions:
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell * copies of the Software, and to permit persons to whom the Software is * furnished to do so, subject to the following conditions:
  *
  * The above copyright notice and this permission notice shall be included in all
  * copies or substantial portions of the Software.
@@ -20,34 +18,32 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * Game.h
+ * 
+ * Defines the game rules and behaviors
  */
 
-#include "Game.h"
+#ifndef GAMEINTERFACE_H
+#define GAMEINTERFACE_H
 
-Game::Game()
+#define KOTH 0
+#define CSGO 1
+
+#include "Hardware.h"
+
+class GameInterface
 {
+    private:
+        Hardware hardware;
+        void playKOTH();
+        void playCSGO();
 
-}
+    public:
+        GameInterface();
 
-void Game::playGame(int type)
-{
-    switch(type)
-    {
-        case KOTH:
-            playKOTH();
-        case CSGO:
-            playCSGO();
-        default:
-            return;
-    }
-}
+        int showMenu();
+        void playGame(int type);
+};
 
-void Game::playKOTH()
-{
-
-}
-
-void Game::playCSGO()
-{
-
-}
+#endif

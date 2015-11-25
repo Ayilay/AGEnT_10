@@ -31,14 +31,21 @@
  * email: georgetroulis@gmail.com
 */
 
-#include "Game.h"
+// Include LiquidCrystal so that compiler doesn't freak out
+#include <LiquidCrystal.h>
+
+#include "GameInterface.h"
+
+GameInterface interface;
+
+int selection;
 
 void setup()
 {
-
 }
 
 void loop()
 {
-
+    selection = interface.showMenu();
+    interface.playGame(selection);
 }

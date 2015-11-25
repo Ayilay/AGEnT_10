@@ -20,21 +20,28 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
+ *
+ * Hardware.h
+ *
+ * Defines the electronic components used
+ *
  */
 
 #include "Hardware.h"
 #include <Arduino.h>
 
 Hardware::Hardware() :
-    redLED(8), greenLED(9), speaker(11), actionButton(12), selectorButton(13),
+    redLED(LEDRedPin), greenLED(LEDGreenPin), speaker(speakerPin), 
+    actionButton(buttonActionPin), selectorButton(buttonSelectorPin),
     lcd(2, 3, 4, 5, 6, 7)
 {
-
+    lcd.begin(20, 4);
+    clearDisplay();
 }
 
-int Hardware::getButtonState(int button)
+bool Hardware::isPressed(int button)
 {
-
+    return digitalRead(button);
 }
 
 void Hardware::setLED(int led, int mode)
@@ -42,12 +49,24 @@ void Hardware::setLED(int led, int mode)
     digitalWrite(led, mode);
 }
 
-void Hardware::setTone(int tone, int duration)
+void Hardware::setTone(int pitch, int duration)
 {
-    tone(speaker, tone, duration);
+    tone(speaker, pitch, duration);
 }
 
 void Hardware::setMessage(String message)
 {
+    lcd.print(message);
+}
 
+void Hardware::setMessage(String message, int row)
+{
+    lcd.setCursor(0, row);
+    lcd.print(message);
+}
+
+void Hardware::clearDisplay()
+{
+    lcd.clear();
+    lcd.setCursor(0, 0);
 }
