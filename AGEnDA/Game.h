@@ -28,7 +28,7 @@ class Game
 
         // Abstract methods implemented by specific games
         virtual bool isPlaying()  = 0;
-        virtual void doGameLoop() = 0;
+        virtual void doGameLoop(unsigned long globalTime) = 0;
         virtual void doEndGame()  = 0;
 };
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016 Georges Troulis
+ * Copyright (c) 2017 Georges Troulis
  *
  * Arduino
  * Game
@@ -57,6 +57,8 @@ Game* gameList[numGames];
 // The game that's currently selected to play
 Game* gameSelected;
 
+// TODO List:
+// Display game options (once game is selected)
 void setup()
 {
     pinMode(ledRED,    OUTPUT);
@@ -68,7 +70,15 @@ void setup()
     {
         Serial.begin(9600);
         Serial.println("Device only supports LCD screens of 20x4 or larger");
-        return;
+
+        // hopefully there is an at least 16x2 LCD
+        lcd.begin(16, 2);
+        lcd.clear();
+        lcd.print("Unsupported");
+        lcd.setCursor(0, 1);
+        lcd.print("LCD Dimensions");
+
+        exit(0);
     }
 
     lcd.begin(LCDNUMCOLS, LCDNUMROWS);
@@ -78,23 +88,23 @@ void setup()
     gameList[1] = &csgoGame;
 
     // Display the menu, and grab the selected game
-    gameSelected = gameList[displayMainMenu()];
+    // gameSelected = gameList[displayMainMenu()];
+    gameSelected = gameList[0]; // For testing purposes, do KOTH for now
 
-    lcd.clear();
-    lcd.print("Game Selected:");
-    lcd.setCursor(0, 1);
-    lcd.print(gameSelected->getGameName());
-    delay(2000);
+    // For Testing purposes. Uncomment when done
+    // lcd.clear();
+    // lcd.print("Game Selected:");
+    // lcd.setCursor(0, 1);
+    // lcd.print(gameSelected->getGameName());
+    // delay(1000);
 
-    // TODO List:
-    // Display game options (once game is selected)
 }
 
 void loop()
 {
     while(gameSelected->isPlaying())
     {
-        gameSelected->doGameLoop();
+        gameSelected->doGameLoop(getTime());
         delay(10);
     }
 
@@ -111,11 +121,12 @@ void loop()
  * Red Button makes selection
  *
  * TODO: Make this scroll nicely through the options
+ * TODO: Support for more game modes
 */
 int displayMainMenu()
 {
     int cursorY = 0;
-    int capacity = min(numGames, LCDNUMROWS); // Scroll until out of rows, or out of games if numGames < numRows
+    int capacity = min(numGames, LCDNUMROWS-1); // Scroll until out of rows, or out of games if numGames < numRows
 
     const int& buttonSelect = buttonRED;
     const int& buttonScroll = buttonBLU;
@@ -124,9 +135,10 @@ int displayMainMenu()
     {
         // Display everything on the screen
         lcd.clear();
+        lcd.print("Select a Game Mode:");
         for (int i = 0; i < capacity; i++)
         {
-            lcd.setCursor(0, i);
+            lcd.setCursor(0, i+1);
 
             if (i == cursorY) lcd.print("> ");
             else              lcd.print("  ");
@@ -153,3 +165,7 @@ int displayMainMenu()
         delay(20);
     }
 }
+
+// Returns the time since the turning on of the microcontroller, rounded to 50 ms intervals
+unsigned long getTime()
+{ return (millis() / 50) * 50; }

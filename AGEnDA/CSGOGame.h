@@ -19,7 +19,7 @@ class CSGOGame : public Game
 
         // Inherited virtual methods from Game
         bool isPlaying();
-        void doGameLoop();
+        void doGameLoop(unsigned long globalTime);
         void doEndGame();
 
     private:

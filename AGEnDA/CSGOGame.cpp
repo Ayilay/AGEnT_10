@@ -24,7 +24,7 @@ bool CSGOGame::isPlaying()
     return true;
 }
 
-void CSGOGame::doGameLoop()
+void CSGOGame::doGameLoop(unsigned long globalTime)
 {
     lcd->clear();
     lcd->print("Playing CSGO");
