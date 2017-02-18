@@ -4,7 +4,7 @@
  * CSGOGame.h
  *
  * Declares behavior for CSGO Game Mode
-*/ 
+*/
 
 #ifndef _AGENDA_CSGOGAME_H
 #define _AGENDA_CSGOGAME_H
@@ -20,8 +20,11 @@ class CSGOGame : public Game
         // Inherited virtual methods from Game
         bool isPlaying();
         void doGameLoop();
+        void doEndGame();
 
     private:
+        // For convenience, this points to the lcd stored in HardwareInterface
+        LiquidCrystal* lcd;
 };
 
 #endif
