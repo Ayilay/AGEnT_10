@@ -16,14 +16,15 @@
 
 KOTHGame::KOTHGame(HardwareInterface* hw)
     : Game(hw, "King of the Hill"),
-      timeToCap(1),
+      timeToCap(5),
       timePerTeam(10),
       activeTeam("none"),
       capturingTeam("none"),
       gameIsInProgress(true),
       timeInitCapturing(0L),
       capturingTime(0L),
-      prevButtonState(0)
+      prevButtonState(0),
+      timeInitCountDown(0)
 {
     lcd = hardware->getLCD();
 
@@ -44,11 +45,15 @@ void KOTHGame::doGameLoop(unsigned long globalTime)
 {
     updateDisplay();
     updateCaptureProgress(globalTime);
+    updateTimers(globalTime);
 }
 
 void KOTHGame::doEndGame()
 {
-    lcd->print("KOTH Over :D");
+    String message = activeTeam + " won!";
+    lcd->clear();
+    lcd->setCursor((hardware->numLCDCols - message.length()) / 2, 1);
+    lcd->print(message);
 }
 
 ////////////////////////////////////////////////////////////
@@ -70,7 +75,7 @@ void KOTHGame::updateDisplay()
 
         lcd->setCursor(0, 0);
         lcd->print(capturingTeam);
-        lcd->print(" Capturing!");
+        lcd->print(" Capturing...");
 
         lcd->setCursor(0, 1);
         lcd->print("|");
@@ -78,6 +83,19 @@ void KOTHGame::updateDisplay()
             lcd->print('-');
         lcd->setCursor(hardware->numLCDCols - 1, 1);
         lcd->print("|");
+    }
+    else
+    {
+        lcd->setCursor(0, 0);
+        if (activeTeam != "none")
+        {
+            lcd->print("Owned by ");
+            lcd->print(activeTeam);
+        }
+        else
+        {
+            lcd->print("Capture the Point!");
+        }
     }
 
     // Times of the teams
@@ -110,6 +128,8 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
                 capturingTime = 0;
 
                 printCaptureMessage();
+
+                timeInitCountDown = globalTime;
             }
         }
     }
@@ -119,6 +139,27 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
     }
 
     prevButtonState = currentButtonState;
+}
+
+void KOTHGame::updateTimers(unsigned long globalTime)
+{
+    if (activeTeam == "none") return;
+
+    // Helps with avoiding redundant code
+    int& activeTime = activeTeam == "RED" ? redTime : bluTime;
+    if (activeTime <= 0)
+    {
+        gameIsInProgress = false;
+        return;
+    }
+
+    unsigned long timeOwnedElapsed = globalTime - timeInitCountDown;
+
+    if (timeOwnedElapsed > 1000)
+    {
+        timeInitCountDown += 1000;
+        activeTime--;
+    }
 }
 
 // Convert time from 'int seconds' to 'mm:ss string'

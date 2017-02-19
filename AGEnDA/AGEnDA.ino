@@ -88,15 +88,14 @@ void setup()
     gameList[1] = &csgoGame;
 
     // Display the menu, and grab the selected game
-    // gameSelected = gameList[displayMainMenu()];
-    gameSelected = gameList[0]; // For testing purposes, do KOTH for now
+    gameSelected = gameList[displayMainMenu()];
+    // gameSelected = gameList[0]; // For testing purposes, do KOTH for now
 
-    // For Testing purposes. Uncomment when done
-    // lcd.clear();
-    // lcd.print("Game Selected:");
-    // lcd.setCursor(0, 1);
-    // lcd.print(gameSelected->getGameName());
-    // delay(1000);
+    lcd.clear();
+    lcd.print("Game Selected:");
+    lcd.setCursor(0, 1);
+    lcd.print(gameSelected->getGameName());
+    delay(1000);
 
 }
 
