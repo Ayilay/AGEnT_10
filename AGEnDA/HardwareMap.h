@@ -1,7 +1,7 @@
 /*
  * Copyright (c) 2017 Georges Troulis
  *
- * HardwareInterface.h
+ * HardwareMap.h
  *
  * Has references to all hardware elements (displays etc) such that they can be used
  * by the implementing Game classes.
@@ -12,7 +12,7 @@
 
 #include <LiquidCrystal.h>
 
-class HardwareInterface
+class HardwareMap
 {
     private:
         LiquidCrystal* lcd;
@@ -26,9 +26,18 @@ class HardwareInterface
         const int numLCDRows;
         const int numLCDCols;
 
-        HardwareInterface(int _ledRED, int _ledBLU, int _buttonRED, int _buttonBLU, LiquidCrystal* _lcd, int _numLCDRows, int _numLCDCols);
+        HardwareMap(int _ledRED, int _ledBLU, int _buttonRED, int _buttonBLU, LiquidCrystal* _lcd, int _numLCDRows, int _numLCDCols)
+            : ledRED(_ledRED),
+              ledBLU(_ledBLU),
+              buttonRED(_buttonRED),
+              buttonBLU(_buttonBLU),
+              lcd(_lcd),
+              numLCDRows(_numLCDRows),
+              numLCDCols(_numLCDCols)
+        {};
 
-        LiquidCrystal* getLCD();
+        LiquidCrystal* getLCD()
+        {   return lcd;  };
 };
 
 #endif

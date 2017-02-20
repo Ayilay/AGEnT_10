@@ -9,13 +9,13 @@
 #ifndef _AGENDA_KOTHGAME_H
 #define _AGENDA_KOTHGAME_H
 
-#include "HardwareInterface.h"
+#include "HardwareMap.h"
 #include "Game.h"
 
 class KOTHGame : public Game
 {
     public:
-        KOTHGame(HardwareInterface* hw);
+        KOTHGame(HardwareMap* hw);
 
         // Inherited virtual methods from Game
         bool isPlaying();
@@ -23,13 +23,13 @@ class KOTHGame : public Game
         void doEndGame();
 
     private:
-        LiquidCrystal* lcd;     // Points to the lcd stored in HardwareInterface for convenience
+        LiquidCrystal* lcd;     // Points to the lcd stored in HardwareMap for convenience
 
         // Game Constants
         const int timeToCap;    // The time necessary to capture the control point (in seconds)
         const int timePerTeam;  // The initial time that each team is given (in minutes)
 
-        // Game state variables
+        // Game State Variables
         int redTime, bluTime;   // Stores the times of the 2 teams
         int prevButtonState;    // For capturing: keeps track of if "button state" changes
         bool gameIsInProgress;  // When false, game ends

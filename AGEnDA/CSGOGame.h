@@ -9,13 +9,13 @@
 #ifndef _AGENDA_CSGOGAME_H
 #define _AGENDA_CSGOGAME_H
 
-#include "HardwareInterface.h"
+#include "HardwareMap.h"
 #include "Game.h"
 
 class CSGOGame : public Game
 {
     public:
-        CSGOGame(HardwareInterface* hw);
+        CSGOGame(HardwareMap* hw);
 
         // Inherited virtual methods from Game
         bool isPlaying();
@@ -23,8 +23,15 @@ class CSGOGame : public Game
         void doEndGame();
 
     private:
-        // For convenience, this points to the lcd stored in HardwareInterface
-        LiquidCrystal* lcd;
+        LiquidCrystal* lcd;     // Points to the lcd stored in HardwareMap for convenience
+
+        // Game Constants
+        int armTime;
+        int defuseTime;
+        int timeUntilBoom;
+
+        // Game State Variables
+        // Gameplay Methods
 };
 
 #endif

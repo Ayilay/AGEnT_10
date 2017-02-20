@@ -30,7 +30,7 @@
 
 #include <LiquidCrystal.h>
 
-#include "HardwareInterface.h"
+#include "HardwareMap.h"
 #include "Game.h"
 #include "KOTHGame.h"
 #include "CSGOGame.h"
@@ -45,10 +45,10 @@ const int buttonBLU  = 13;
 
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
-HardwareInterface hardwareInterface(ledRED, ledBLU, buttonRED, buttonBLU, &lcd, LCDNUMROWS, LCDNUMCOLS);
+HardwareMap hardwareMap(ledRED, ledBLU, buttonRED, buttonBLU, &lcd, LCDNUMROWS, LCDNUMCOLS);
 
-KOTHGame kothGame(&hardwareInterface);
-CSGOGame csgoGame(&hardwareInterface);
+KOTHGame kothGame(&hardwareMap);
+CSGOGame csgoGame(&hardwareMap);
 
 // Stores all Games in an array for convenience of iteration
 const int numGames = 2;

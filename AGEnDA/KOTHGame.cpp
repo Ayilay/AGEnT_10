@@ -12,9 +12,9 @@
 
 #include "KOTHGame.h"
 #include "Game.h"
-#include "HardwareInterface.h"
+#include "HardwareMap.h"
 
-KOTHGame::KOTHGame(HardwareInterface* hw)
+KOTHGame::KOTHGame(HardwareMap* hw)
     : Game(hw, "King of the Hill"),
       timeToCap(5),
       timePerTeam(10),

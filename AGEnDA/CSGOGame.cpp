@@ -10,9 +10,9 @@
 
 #include "CSGOGame.h"
 #include "Game.h"
-#include "HardwareInterface.h"
+#include "HardwareMap.h"
 
-CSGOGame::CSGOGame(HardwareInterface* hw)
+CSGOGame::CSGOGame(HardwareMap* hw)
     : Game(hw, "CS:GO Competitive")
 {
     lcd = hardware->getLCD();

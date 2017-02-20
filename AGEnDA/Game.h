@@ -17,10 +17,10 @@ class Game
 {
     protected:
         String gameID;
-        HardwareInterface* hardware;
+        HardwareMap* hardware;
 
     public:
-        Game(HardwareInterface* hw, String gameName)
+        Game(HardwareMap* hw, String gameName)
             : hardware(hw), gameID(gameName) {}
 
         String getGameName()
