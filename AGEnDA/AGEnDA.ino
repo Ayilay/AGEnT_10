@@ -38,10 +38,10 @@
 const int LCDNUMROWS =  4;
 const int LCDNUMCOLS = 20;
 
+const int buttonRED  =  8;
+const int buttonBLU  =  9;
 const int ledRED     = 10;
 const int ledBLU     = 11;
-const int buttonRED  = 12;
-const int buttonBLU  = 13;
 
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
@@ -89,8 +89,10 @@ void setup()
 
     // Display the menu, and grab the selected game
     gameSelected = gameList[displayMainMenu()];
-    // gameSelected = gameList[0]; // For testing purposes, do KOTH for now
+    //gameSelected = gameList[1]; // For testing purposes, do CSGO for now
 
+    digitalWrite(ledRED, LOW);
+    digitalWrite(ledBLU, LOW);
     lcd.clear();
     lcd.print("Game Selected:");
     lcd.setCursor(0, 1);
@@ -132,6 +134,11 @@ int displayMainMenu()
 
     while (true)
     {
+        // Update the LEDs
+        int brightness = 101 + 100 * sin(getTime() * 2.0 * PI / 2500.0);
+        analogWrite(ledRED, brightness);
+        analogWrite(ledBLU, brightness);
+
         // Display everything on the screen
         lcd.clear();
         lcd.print("Select a Game Mode:");

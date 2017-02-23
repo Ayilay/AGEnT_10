@@ -50,6 +50,9 @@ void KOTHGame::doGameLoop(unsigned long globalTime)
 
 void KOTHGame::doEndGame()
 {
+    digitalWrite(hardware->ledRED, HIGH);
+    digitalWrite(hardware->ledBLU, HIGH);
+
     String message = activeTeam + " won!";
     lcd->clear();
     lcd->setCursor((hardware->numLCDCols - message.length()) / 2, 1);
@@ -68,7 +71,6 @@ void KOTHGame::updateDisplay()
     lcd->print("BLU Time   RED Time");
 
     // Print the capture progress if we are capturing
-    //int progressBarIntervals = capturingTime * (double) timeToCap / (hardware->numLCDCols * 1000);
     if (capturingTime > 0)
     {
         int captureProgress = ((hardware->numLCDCols-2)/((double) timeToCap * 1000)) * capturingTime;
@@ -127,9 +129,18 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
                 activeTeam = capturingTeam;
                 capturingTime = 0;
 
-                printCaptureMessage();
-
                 timeInitCountDown = globalTime;
+
+                if (activeTeam == "RED")
+                {
+                    digitalWrite(hardware->ledRED, HIGH);
+                    digitalWrite(hardware->ledBLU, LOW);
+                }
+                else if (activeTeam == "BLU")
+                {
+                    digitalWrite(hardware->ledBLU, HIGH);
+                    digitalWrite(hardware->ledRED, LOW);
+                }
             }
         }
     }
