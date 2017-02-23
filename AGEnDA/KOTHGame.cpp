@@ -23,8 +23,8 @@ KOTHGame::KOTHGame(HardwareMap* hw)
       gameIsInProgress(true),
       timeInitCapturing(0L),
       capturingTime(0L),
-      prevButtonState(0),
-      timeInitCountDown(0)
+      timeInitCountDown(0L),
+      prevButtonState(0)
 {
     lcd = hardware->getLCD();
 
