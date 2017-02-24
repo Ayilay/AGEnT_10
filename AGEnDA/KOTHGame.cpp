@@ -43,7 +43,7 @@ bool KOTHGame::isPlaying()
 
 void KOTHGame::doGameLoop(unsigned long globalTime)
 {
-    updateDisplay();
+    updateDisplay(globalTime);
     updateCaptureProgress(globalTime);
     updateTimers(globalTime);
 }
@@ -63,7 +63,7 @@ void KOTHGame::doEndGame()
 // Private Gameplay methods
 ////////////////////////////////////////////////////////////
 
-void KOTHGame::updateDisplay()
+void KOTHGame::updateDisplay(unsigned long globalTime)
 {
     lcd->clear();
 
@@ -75,14 +75,37 @@ void KOTHGame::updateDisplay()
     {
         int captureProgress = ((hardware->numLCDCols-2)/((double) timeToCap * 1000)) * capturingTime;
 
+        // Display who is capturing
         lcd->setCursor(0, 0);
         lcd->print(capturingTeam);
         lcd->print(" Capturing...");
 
+        // Progress Bar
         lcd->setCursor(0, 1);
         lcd->print("|");
-        for(int i = 0; i < captureProgress; i++)
-            lcd->print('-');
+
+        // Blink the RED or BLU LEDs based on who's capturing
+        int brightness = 1 + sin(capturingTime * 2.0 * PI / 500);
+
+        if (capturingTeam == "BLU")
+        {
+            // For BLU team, display capture progress from left to right
+            for(int i = 0; i < captureProgress; i++)
+                lcd->print('-');
+
+            digitalWrite(hardware->ledBLU, brightness);
+        }
+        else
+        {
+            // For RED team, display capture progress from right to left
+            lcd->setCursor(hardware->numLCDCols - 1 - captureProgress, 1);
+            for(int i = 0; i < captureProgress; i++)
+                lcd->print('-');
+
+            digitalWrite(hardware->ledRED, brightness);
+        }
+
+
         lcd->setCursor(hardware->numLCDCols - 1, 1);
         lcd->print("|");
     }

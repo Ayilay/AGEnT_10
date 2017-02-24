@@ -41,7 +41,7 @@ class KOTHGame : public Game
         unsigned long timeInitCountDown;  // The time since a new team captured the point (to count down)
 
         // Gameplay Methods
-        void updateDisplay();
+        void updateDisplay(unsigned long globalTime);
         void updateCaptureProgress(unsigned long globalTime);
         void updateTimers(unsigned long globalTime);
         void printCaptureMessage();
