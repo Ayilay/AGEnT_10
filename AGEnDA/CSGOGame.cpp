@@ -19,7 +19,7 @@ CSGOGame::CSGOGame(HardwareMap* hw)
       armTime(5),
       defuseTime(7),
       password("7355608"),
-      timeUntilBoom(120),
+      timeUntilBoom(70),
       prevButtonState(0),
       gameOver(false),
       arming(false),
@@ -42,7 +42,7 @@ bool CSGOGame::isPlaying()
 
 void CSGOGame::doGameLoop(unsigned long globalTime)
 {
-    updateDisplay();
+    updateDisplay(globalTime);
     updateArmStatus(globalTime);
     countDown(globalTime);
 }
@@ -59,12 +59,18 @@ void CSGOGame::doEndGame()
         lcd->print("Counter Terrorists");
         lcd->setCursor(0, 2);
         lcd->print("win");
+
+        digitalWrite(hardware->ledBLU, HIGH);
+        digitalWrite(hardware->ledRED, LOW);
     }
     else
     {
         lcd->print("Bomb Blew Up");
         lcd->setCursor(0, 1);
         lcd->print("Terrorists win");
+
+        digitalWrite(hardware->ledBLU, LOW);
+        digitalWrite(hardware->ledRED, HIGH);
     }
 }
 
@@ -72,7 +78,7 @@ void CSGOGame::doEndGame()
 // Private Gameplay methods
 ////////////////////////////////////////////////////////////
 
-void CSGOGame::updateDisplay()
+void CSGOGame::updateDisplay(unsigned long globalTime)
 {
     lcd->clear();
 
@@ -81,6 +87,20 @@ void CSGOGame::updateDisplay()
     {
         lcd->setCursor(7, 1);
         lcd->print(formatTime());
+
+        // Blink the lights if the bomb is armed
+        if (armed)
+        {
+            int blinkPeriod;
+            if (timeUntilBoom >= 30)         blinkPeriod = 1000;
+            else if (timeUntilBoom >= 10)    blinkPeriod =  500;
+            else if (timeUntilBoom >=  5)    blinkPeriod =  250;
+            else                             blinkPeriod =  150;
+
+            int brightness = 1 + sin((globalTime - timeArmComplete) * 2.0 * PI / blinkPeriod);
+            digitalWrite(hardware->ledRED, brightness);
+            digitalWrite(hardware->ledBLU, LOW);
+        }
     }
     else if (arming)
     {
@@ -119,6 +139,12 @@ void CSGOGame::updateDisplay()
             for(int i = 0; i < 7 - armProgress; i++)
                 lcd->print("*");
             lcd->print("|");
+
+
+            // Blink the Blue LEDs to indicate defusing
+            int brightness = 1 + sin((globalTime - timeArmComplete) * 2.0 * PI / 500);
+            digitalWrite(hardware->ledBLU, brightness);
+            digitalWrite(hardware->ledRED, LOW);
         }
     }
 }
