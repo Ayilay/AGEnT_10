@@ -164,6 +164,11 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
                     digitalWrite(hardware->ledBLU, HIGH);
                     digitalWrite(hardware->ledRED, LOW);
                 }
+                else
+                {
+                    digitalWrite(hardware->ledRED, LOW);
+                    digitalWrite(hardware->ledBLU, LOW);
+                }
             }
         }
     }
