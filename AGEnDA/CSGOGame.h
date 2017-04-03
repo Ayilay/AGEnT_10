@@ -15,7 +15,7 @@
 class CSGOGame : public Game
 {
     public:
-        CSGOGame(HardwareMap* hw);
+        CSGOGame(HardwareMap* hw, int CSGO_ID);
 
         // Inherited virtual methods from Game
         bool isPlaying();

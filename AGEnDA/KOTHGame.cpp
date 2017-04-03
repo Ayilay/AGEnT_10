@@ -14,8 +14,8 @@
 #include "Game.h"
 #include "HardwareMap.h"
 
-KOTHGame::KOTHGame(HardwareMap* hw)
-    : Game(hw, "King of the Hill"),
+KOTHGame::KOTHGame(HardwareMap* hw, int KOTH_ID)
+    : Game(hw, "King of the Hill", KOTH_ID),
       timeToCap(5),
       timePerTeam(10),
       activeTeam("none"),

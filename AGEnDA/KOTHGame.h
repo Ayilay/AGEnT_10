@@ -15,7 +15,7 @@
 class KOTHGame : public Game
 {
     public:
-        KOTHGame(HardwareMap* hw);
+        KOTHGame(HardwareMap* hw, int KOTH_ID);
 
         // Inherited virtual methods from Game
         bool isPlaying();

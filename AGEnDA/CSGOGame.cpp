@@ -14,8 +14,8 @@
 #include "Game.h"
 #include "HardwareMap.h"
 
-CSGOGame::CSGOGame(HardwareMap* hw)
-    : Game(hw, "CS:GO Competitive"),
+CSGOGame::CSGOGame(HardwareMap* hw, int CSGO_ID)
+    : Game(hw, "CS:GO Competitive", CSGO_ID),
       armTime(5),
       defuseTime(7),
       password("7355608"),

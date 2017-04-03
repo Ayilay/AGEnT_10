@@ -38,17 +38,20 @@
 const int LCDNUMROWS =  4;
 const int LCDNUMCOLS = 20;
 
-const int buttonRED  =  8;
-const int buttonBLU  =  9;
-const int ledRED     = 10;
-const int ledBLU     = 11;
+const int buttonRED     =  8;
+const int buttonBLU     =  9;
+const int ledRED        = 10;
+const int ledBLU        = 11;
+const int encoderPinA   = 12;
+const int encoderPinB   = 13;
+const int encoderButton = A0;
 
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
-HardwareMap hardwareMap(ledRED, ledBLU, buttonRED, buttonBLU, &lcd, LCDNUMROWS, LCDNUMCOLS);
+HardwareMap hardwareMap(ledRED, ledBLU, buttonRED, buttonBLU, encoderPinA, encoderPinB, encoderButton,  &lcd, LCDNUMROWS, LCDNUMCOLS);
 
-KOTHGame kothGame(&hardwareMap);
-CSGOGame csgoGame(&hardwareMap);
+KOTHGame kothGame(&hardwareMap, 0);
+CSGOGame csgoGame(&hardwareMap, 1);
 
 // Stores all Games in an array for convenience of iteration
 const int numGames = 2;
@@ -65,6 +68,10 @@ void setup()
     pinMode(ledBLU,    OUTPUT);
     pinMode(buttonRED,  INPUT);
     pinMode(buttonBLU,  INPUT);
+
+    pinMode(encoderPinA,   INPUT);
+    pinMode(encoderPinB,   INPUT);
+    pinMode(encoderButton, INPUT);
 
     if (LCDNUMCOLS < 20 || LCDNUMROWS < 4)
     {
@@ -84,8 +91,8 @@ void setup()
     lcd.begin(LCDNUMCOLS, LCDNUMROWS);
 
     // Manually add all games in array (numGames better be initialized correctly)
-    gameList[0] = &kothGame;
-    gameList[1] = &csgoGame;
+    gameList[kothGame.getID()] = &kothGame;
+    gameList[csgoGame.getID()] = &csgoGame;
 
     // Display the menu, and grab the selected game
     gameSelected = gameList[displayMainMenu()];
