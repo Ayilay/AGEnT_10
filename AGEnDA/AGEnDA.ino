@@ -31,9 +31,16 @@
 #include <LiquidCrystal.h>
 
 #include "HardwareMap.h"
+#include "MenuManager.h"
+#include "TimeManager.h"
+
 #include "Game.h"
 #include "KOTHGame.h"
 #include "CSGOGame.h"
+
+////////////////////////////////////////////////////////////
+// Constants, IO pins, and other initializations
+////////////////////////////////////////////////////////////
 
 const int LCDNUMROWS =  4;
 const int LCDNUMCOLS = 20;
@@ -48,8 +55,10 @@ const int encoderButton = A0;
 
 LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
 
+// For sharing all hardware pins across entire software
 HardwareMap hardwareMap(ledRED, ledBLU, buttonRED, buttonBLU, encoderPinA, encoderPinB, encoderButton,  &lcd, LCDNUMROWS, LCDNUMCOLS);
 
+// The individual games that we can play to be stored in gameList later
 KOTHGame kothGame(&hardwareMap, 0);
 CSGOGame csgoGame(&hardwareMap, 1);
 
@@ -59,6 +68,14 @@ Game* gameList[numGames];
 
 // The game that's currently selected to play
 Game* gameSelected;
+
+// Displays main menu and game settings menu for each game
+// TODO: Add gameList parameter somehow
+MenuManager menuManager(&hardwareMap, (Game***)&gameList, numGames);
+
+////////////////////////////////////////////////////////////
+// Main Gameplay Methods
+////////////////////////////////////////////////////////////
 
 // TODO List:
 // Display game options (once game is selected)
@@ -95,7 +112,7 @@ void setup()
     gameList[csgoGame.getID()] = &csgoGame;
 
     // Display the menu, and grab the selected game
-    gameSelected = gameList[displayMainMenu()];
+    gameSelected = gameList[menuManager.displayMainMenu()];
     //gameSelected = gameList[1]; // For testing purposes, do CSGO for now
 
     digitalWrite(ledRED, LOW);
@@ -112,74 +129,10 @@ void loop()
 {
     while(gameSelected->isPlaying())
     {
-        gameSelected->doGameLoop(getTime());
+        gameSelected->doGameLoop();
         delay(10);
     }
 
     gameSelected->doEndGame();
     delay(10);
 }
-
-////////////////////////////////////////////////////////////
-// Menu Selection and Helper methods
-////////////////////////////////////////////////////////////
-
-/*
- * Displays all the games in a scrollable way. Returns the index of the selected game
- * Blue Button Scrolls clockwise
- * Red Button makes selection
- *
- * TODO: Make this scroll nicely through the options
- * TODO: Support for more game modes
-*/
-int displayMainMenu()
-{
-    int cursorY = 0;
-    int capacity = min(numGames, LCDNUMROWS-1); // Scroll until out of rows, or out of games if numGames < numRows
-
-    const int& buttonSelect = buttonRED;
-    const int& buttonScroll = buttonBLU;
-
-    while (true)
-    {
-        // Update the LEDs
-        int brightness = 101 + 100 * sin(getTime() * 2.0 * PI / 2500.0);
-        analogWrite(ledRED, brightness);
-        analogWrite(ledBLU, brightness);
-
-        // Display everything on the screen
-        lcd.clear();
-        lcd.print("Select a Game Mode:");
-        for (int i = 0; i < capacity; i++)
-        {
-            lcd.setCursor(0, i+1);
-
-            if (i == cursorY) lcd.print("> ");
-            else              lcd.print("  ");
-            lcd.print(gameList[i]->getGameName());
-        }
-
-        // Check for button press
-        if (digitalRead(buttonScroll))
-        {
-            while (digitalRead(buttonScroll)) delay(1);
-
-            cursorY++;
-            if (cursorY >= capacity) cursorY = 0;
-        }
-
-        if (digitalRead(buttonSelect))
-        {
-            while (digitalRead(buttonSelect)) delay(1);
-
-            // TODO this will later have to be replaced with something that's not cursorY
-            return cursorY;
-        }
-
-        delay(20);
-    }
-}
-
-// Returns the time since the turning on of the microcontroller, rounded to 50 ms intervals
-unsigned long getTime()
-{ return (millis() / 50) * 50; }

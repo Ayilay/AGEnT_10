@@ -13,6 +13,7 @@
 #include "KOTHGame.h"
 #include "Game.h"
 #include "HardwareMap.h"
+#include "TimeManager.h"
 
 KOTHGame::KOTHGame(HardwareMap* hw, int KOTH_ID)
     : Game(hw, "King of the Hill", KOTH_ID),
@@ -41,8 +42,9 @@ bool KOTHGame::isPlaying()
     return gameIsInProgress;
 }
 
-void KOTHGame::doGameLoop(unsigned long globalTime)
+void KOTHGame::doGameLoop()
 {
+    unsigned long globalTime = TimeManager::getTime();
     updateDisplay(globalTime);
     updateCaptureProgress(globalTime);
     updateTimers(globalTime);

@@ -19,7 +19,7 @@ class KOTHGame : public Game
 
         // Inherited virtual methods from Game
         bool isPlaying();
-        void doGameLoop(unsigned long globalTime);
+        void doGameLoop();
         void doEndGame();
 
     private:
