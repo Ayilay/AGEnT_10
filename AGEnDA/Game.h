@@ -13,6 +13,8 @@
 #ifndef _AGENDA_GAME_H
 #define _AGENDA_GAME_H
 
+#define NUMGAMES 2
+
 class Game
 {
     protected:

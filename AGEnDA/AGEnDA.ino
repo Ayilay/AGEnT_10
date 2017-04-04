@@ -63,15 +63,14 @@ KOTHGame kothGame(&hardwareMap, 0);
 CSGOGame csgoGame(&hardwareMap, 1);
 
 // Stores all Games in an array for convenience of iteration
-const int numGames = 2;
-Game* gameList[numGames];
+Game* gameList[NUMGAMES];
 
 // The game that's currently selected to play
 Game* gameSelected;
 
 // Displays main menu and game settings menu for each game
 // TODO: Add gameList parameter somehow
-MenuManager menuManager(&hardwareMap, (Game***)&gameList, numGames);
+MenuManager menuManager(&hardwareMap);
 
 ////////////////////////////////////////////////////////////
 // Main Gameplay Methods
@@ -107,9 +106,11 @@ void setup()
 
     lcd.begin(LCDNUMCOLS, LCDNUMROWS);
 
-    // Manually add all games in array (numGames better be initialized correctly)
+    // Manually add all games in array (gameList better be initialized correctly)
     gameList[kothGame.getID()] = &kothGame;
     gameList[csgoGame.getID()] = &csgoGame;
+
+    menuManager.initGameList(gameList);
 
     // Display the menu, and grab the selected game
     gameSelected = gameList[menuManager.displayMainMenu()];
