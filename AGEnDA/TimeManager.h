@@ -7,6 +7,9 @@
  *
 */
 
+#ifndef _AGENDA_TIME_MANAGER_H
+#define _AGENDA_TIME_MANAGER_H
+
 #include <Arduino.h>
 
 class TimeManager
@@ -16,3 +19,5 @@ class TimeManager
         static unsigned long getTime()
         { return (millis() / 50) * 50; }
 };
+
+#endif
