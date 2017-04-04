@@ -15,6 +15,7 @@
 MenuManager::MenuManager(HardwareMap* _hw)
     : hw(_hw), prevEncoderPinAState(LOW)
 {
+    lcd = hw->getLCD();
 }
 
 void MenuManager::initGameList(Game** _gameList)
@@ -33,16 +34,15 @@ void MenuManager::initGameList(Game** _gameList)
 */
 int MenuManager::displayMainMenu()
 {
-    Serial.begin(9600);
-
-    LiquidCrystal* lcd = hw->getLCD();
+    const int& altMenuButton  = hw->buttonRED;      // Opens menu for specific game
+    const int& selectorButton = hw->encoderButton;  // Proceeds to gameplay for selected game
 
     int cursorY = 0;
     int capacity = min(NUMGAMES, hw->numLCDRows-1); // Scroll until out of rows, or out of games if NUMGAMES < numRows
 
     while (true)
     {
-        // Update the LEDs
+        // Update the LEDs in a sinusoidal fashion for fanciness
         int brightness = 101 + 100 * sin(TimeManager::getTime() * 2.0 * PI / 2500.0);
         analogWrite(hw->ledRED, brightness);
         analogWrite(hw->ledBLU, brightness);
@@ -60,8 +60,6 @@ int MenuManager::displayMainMenu()
             lcd->print(gameList[i]->getGameName());
         }
 
-
-        Serial.println("in loop");
         // Scroll Detection
         int pinAState = digitalRead(hw->encoderPinA);
         if (prevEncoderPinAState == HIGH && pinAState != prevEncoderPinAState) // Signal A goes from high to low
@@ -81,39 +79,38 @@ int MenuManager::displayMainMenu()
                 if (cursorY < 0) cursorY = capacity - 1;
             }
         }
-        // Select Button is encoder button
-        if (!digitalRead(hw->encoderButton))
+        // Select Button is encoder button and follows inverse logic (HIGH = not pressed)
+        if (!digitalRead(selectorButton))
         {
-            //while (!digitalRead(hw->encoderButton)) delay(1);
-
-            // TODO this will later have to be replaced with something that's not cursorY
             return cursorY;
         }
 
         prevEncoderPinAState = pinAState;
 
+        if (digitalRead(altMenuButton))
+        {
+            displayGameMenu(cursorY);
+        }
+
         // Debounce encoder and eliminate screen flicker
         delay(50);
-
-        // Old button scrolling
-        //const int& buttonScroll = hw->buttonBLU;
-        //const int& buttonSelect = hw->buttonRED;
-        //if (digitalRead(buttonScroll))
-        //{
-        //    while (digitalRead(buttonScroll)) delay(1);
-
-        //    cursorY++;
-        //    if (cursorY >= capacity) cursorY = 0;
-        //}
-
-        //if (digitalRead(buttonSelect))
-        //{
-        //    while (digitalRead(buttonSelect)) delay(1);
-
-        //    // TODO this will later have to be replaced with something that's not cursorY
-        //    return cursorY;
-        //}
-
     }
 }
 
+void MenuManager::displayGameMenu(int selectedGame)
+{
+    const int& backButton     = hw->buttonBLU;      // Goes back to the main menu
+    const int& selectorButton = hw->encoderButton;  // Proceeds to gameplay for selected game
+
+    while (true)
+    {
+        lcd->clear();
+
+        lcd->print("Options for ");
+        lcd->print(gameList[selectedGame]->getShortName());
+
+        if (digitalRead(backButton)) return;
+
+        delay(50);
+    }
+}

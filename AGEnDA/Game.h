@@ -20,14 +20,18 @@ class Game
     protected:
         int gameID;       // Unique numeric index for storing games in array
         String gameName;  // String that belongs to game for display purposes
+        String shortName; // A shorter version of gameName that's displayed for the settings menu
         HardwareMap* hardware;
 
     public:
-        Game(HardwareMap* hw, String _gameName, int _gameID)
-            : hardware(hw), gameName(_gameName), gameID(_gameID) {}
+        Game(HardwareMap* hw, String _gameName, String _shortName, int _gameID)
+            : hardware(hw), gameName(_gameName), shortName(_shortName), gameID(_gameID) {}
 
         String getGameName()
         { return gameName; };
+
+        String getShortName()
+        { return shortName; };
 
         int getID()
         { return gameID; };

@@ -16,7 +16,7 @@
 #include "TimeManager.h"
 
 CSGOGame::CSGOGame(HardwareMap* hw, int CSGO_ID)
-    : Game(hw, "CS:GO Competitive", CSGO_ID),
+    : Game(hw, "CS:GO Competitive", "CS:GO", CSGO_ID),
       armTime(5),
       defuseTime(7),
       password("7355608"),

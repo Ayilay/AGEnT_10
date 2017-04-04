@@ -16,7 +16,7 @@
 #include "TimeManager.h"
 
 KOTHGame::KOTHGame(HardwareMap* hw, int KOTH_ID)
-    : Game(hw, "King of the Hill", KOTH_ID),
+    : Game(hw, "King of the Hill", "KOTH", KOTH_ID),
       timeToCap(5),
       timePerTeam(10),
       activeTeam("none"),

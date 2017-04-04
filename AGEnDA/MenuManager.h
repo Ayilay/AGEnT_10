@@ -10,6 +10,8 @@
 #ifndef _AGENDA_MENUMANAGER_H
 #define _AGENDA_MENUMANAGER_H
 
+#include <LiquidCrystal.h>
+
 #include "HardwareMap.h"
 #include "Game.h"
 
@@ -17,6 +19,7 @@ class MenuManager
 {
     private:
         HardwareMap* hw;
+        LiquidCrystal* lcd;
         Game** gameList;
         int prevEncoderPinAState; // For detecting the direction of rotation from the rotary encoder
 
@@ -25,6 +28,7 @@ class MenuManager
 
         void initGameList(Game** _gameList);
         int displayMainMenu();
+        void displayGameMenu(int selectedGame);
 };
 
 #endif
