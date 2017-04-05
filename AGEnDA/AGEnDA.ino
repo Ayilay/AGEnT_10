@@ -111,7 +111,7 @@ void setup()
 
     // Display the menu, and grab the selected game
     gameSelected = gameList[menuManager.displayMainMenu()];
-    //gameSelected = gameList[1]; // For testing purposes, do CSGO for now
+    gameSelected->init();
 
     digitalWrite(ledRED, LOW);
     digitalWrite(ledBLU, LOW);

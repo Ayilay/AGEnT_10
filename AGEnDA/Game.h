@@ -49,6 +49,7 @@ class Game
         { return gameID; };
 
         // Abstract methods implemented by specific games
+        virtual void init()       = 0;
         virtual bool isPlaying()  = 0;
         virtual void doGameLoop() = 0;
         virtual void doEndGame()  = 0;

@@ -29,9 +29,6 @@ KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
 {
     lcd = hardware->getLCD();
 
-    // TODO this won't update properly after settings stuff
-    bluTime = redTime = timePerTeam;
-
     // Initialize Tweakable Game Settings
     GameOption capTimeOpt  = {"Cap Time",   &capTimeOpts[0],    &timeToCap};
     GameOption teamTimeOpt = {"Team Time",  &teamTimeOpts[0],   &timePerTeam};
@@ -43,6 +40,12 @@ KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
 ////////////////////////////////////////////////////////////
 // Public interface methods
 ////////////////////////////////////////////////////////////
+
+void KOTHGame::init()
+{
+    // timePerTeam was set during the gameSettings menu, still need to update the team times
+    bluTime = redTime = timePerTeam;
+}
 
 bool KOTHGame::isPlaying()
 {

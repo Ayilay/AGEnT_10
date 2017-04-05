@@ -45,6 +45,10 @@ CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
 // Public interface methods
 ////////////////////////////////////////////////////////////
 
+void CSGOGame::init()
+{
+}
+
 bool CSGOGame::isPlaying()
 {
     return !gameOver;

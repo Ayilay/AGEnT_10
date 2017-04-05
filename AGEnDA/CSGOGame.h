@@ -20,6 +20,7 @@ class CSGOGame : public Game
         CSGOGame(HardwareMap* hw, int CSGO_ID);
 
         // Inherited virtual methods from Game
+        void init();
         bool isPlaying();
         void doGameLoop();
         void doEndGame();

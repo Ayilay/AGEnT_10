@@ -20,6 +20,7 @@ class KOTHGame : public Game
         KOTHGame(HardwareMap* hw, int KOTH_ID);
 
         // Inherited virtual methods from Game
+        void init();
         bool isPlaying();
         void doGameLoop();
         void doEndGame();
