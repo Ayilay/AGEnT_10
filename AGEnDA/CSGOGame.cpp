@@ -32,10 +32,6 @@ CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
     lcd = hardware->getLCD();
 
     // Initialize Tweakable Game Settings
-    int armTimeOpts[]  = {2, 3, 5, 10, 0};
-    int defTimeOpts[]  = {2, 3, 5, 10, 0};
-    int boomTimeOpts[] = {35, 45, 60, 90, 120, 0};
-
     GameOption armTimeOpt  = {"Arm Time",       &armTimeOpts[0],  &armTime};
     GameOption defTimeOpt  = {"Defuse Time",    &defTimeOpts[0],  &defuseTime};
     GameOption boomTimeOpt = {"TimeTillBoom",   &boomTimeOpts[0], &timeUntilBoom};

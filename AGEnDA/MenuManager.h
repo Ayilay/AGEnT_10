@@ -26,12 +26,16 @@ class MenuManager
         int prevEncoderPinAState;
         int getEncoderScrollDirection();
 
+        // Private Menu Display Methods
+        void displayGameMenu(int selectedGameID);
+        void displaySettingTweakMenu(int gameID, int settingID);
+        String formatSecondsToMMSS(int seconds);
+
     public:
         MenuManager(HardwareMap* _hw);
 
         void initGameList(Game** _gameList);
         int displayMainMenu();
-        void displayGameMenu(int selectedGameID);
 };
 
 #endif

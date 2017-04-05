@@ -32,6 +32,10 @@ class CSGOGame : public Game
         // Game Options
         GameOption gameSettings[CSGO_NUM_SETTINGS];
 
+        int armTimeOpts[5]  = {2, 3, 5, 10, 0};
+        int defTimeOpts[5]  = {2, 3, 5, 10, 0};
+        int boomTimeOpts[6] = {35, 45, 60, 90, 120, 0};
+
         // Game Constants
         const int armTime;          // Time it takes to arm the bomb (seconds)
         const int defuseTime;       // Time it takes to defuse the bomb (seconds)

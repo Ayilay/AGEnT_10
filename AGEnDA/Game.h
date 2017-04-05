@@ -17,9 +17,9 @@
 
 typedef struct
 {
-    String optionName;  // Display name of option
-    int* options;       // Array of possible options
-    int* optionVar;     // Pointer to variable that stores this option for modification purposes
+    String optionName;          // Display name of option
+    int* optionPossibilities;   // Array of possible options (time values in seconds)
+    int* optionVar;             // Pointer to variable that stores this option for modification purposes
 } GameOption;
 
 class Game

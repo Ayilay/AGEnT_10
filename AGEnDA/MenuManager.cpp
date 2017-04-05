@@ -81,6 +81,7 @@ int MenuManager::displayMainMenu()
 
         if (digitalRead(altMenuButton))
         {
+            while(digitalRead(altMenuButton));
             displayGameMenu(cursorY);
         }
 
@@ -92,7 +93,7 @@ int MenuManager::displayMainMenu()
 void MenuManager::displayGameMenu(int selectedGameID)
 {
     const int& backButton     = hw->buttonBLU;      // Goes back to the main menu
-    const int& selectorButton = hw->encoderButton;  // Proceeds to gameplay for selected game
+    const int& selectorButton = hw->encoderButton;  // Proceeds to modify selected game option
 
     // If the selected game doesn't have any editable game settings, exit this menu
     Game* selectedGame = gameList[selectedGameID];
@@ -119,7 +120,6 @@ void MenuManager::displayGameMenu(int selectedGameID)
             else              lcd->print("  ");
 
             lcd->print(options[i].optionName);
-
         }
 
         // Scroll Detection
@@ -138,9 +138,75 @@ void MenuManager::displayGameMenu(int selectedGameID)
         // Select Button is encoder button and follows inverse logic (HIGH = not pressed)
         if (!digitalRead(selectorButton))
         {
-            // TODO enter setting-specific tweak menu
+            while(!digitalRead(selectorButton));
+            displaySettingTweakMenu(selectedGameID, cursorY);
         }
 
+        // Return to the Main Menu
+        if (digitalRead(backButton))
+        {
+            while (digitalRead(backButton));
+            return;
+        }
+
+        delay(50);
+    }
+}
+
+void MenuManager::displaySettingTweakMenu(int gameID, int settingID)
+{
+    const int& backButton     = hw->buttonBLU;      // Goes back to the game settings menu
+    const int& selectorButton = hw->encoderButton;  // Goes back to the game settings menu
+
+    Game* selectedGame = gameList[gameID];
+    GameOption option = (selectedGame->getGameOptions())[settingID];
+
+    // Count the number of possibilities for each option (last optionPossibility should be a 0)
+    int* optionPossibilities = option.optionPossibilities;
+    int numPossibleOptions = 0;
+    for (; numPossibleOptions < 10; numPossibleOptions++)
+    {
+        if (optionPossibilities[numPossibleOptions] == 0) break;
+    }
+
+    // Determine which option is currently selected and display it first
+    int optionIndex = 0;
+    for (; optionPossibilities[optionIndex] != *option.optionVar; optionIndex++);
+
+    // Display the options and scroll through them using the encoder
+    while (true)
+    {
+        lcd->clear();
+        lcd->setCursor((hw->numLCDCols - option.optionName.length()) / 2, 0);
+        lcd->print(option.optionName);
+
+        String option_str = formatSecondsToMMSS(optionPossibilities[optionIndex]);
+        lcd->setCursor((hw->numLCDCols - option_str.length()) / 2, 1);
+        lcd->print(option_str);
+
+        // Scroll Detection
+        int encoderDirection = getEncoderScrollDirection();
+        if (encoderDirection == 1)
+        {
+            optionIndex++;
+            if (optionIndex >= numPossibleOptions) optionIndex = 0;
+        }
+        else if (encoderDirection == -1)
+        {
+            optionIndex--;
+            if (optionIndex < 0) optionIndex = numPossibleOptions - 1;
+        }
+
+        // Update option variable and return to settings menu
+        if (!digitalRead(selectorButton))
+        {
+            while (!digitalRead(selectorButton));
+
+            *option.optionVar = optionPossibilities[optionIndex];
+            return;
+        }
+
+        // Return to the Main Menu (hopefully it will be held down long enough)
         if (digitalRead(backButton)) return;
 
         delay(50);
@@ -170,4 +236,25 @@ int MenuManager::getEncoderScrollDirection()
 
     prevEncoderPinAState = pinAState;
     return dir;
+}
+
+String MenuManager::formatSecondsToMMSS(int seconds)
+{
+    String result = "";
+    int min = seconds / 60;
+    int sec = seconds % 60;
+
+    // add the minutes, and a leading 0 if necessary
+    if(min < 10)
+        result += '0';
+    result += min;
+
+    result += ':';
+
+    // add the seconds, and a leading 0 if necessary
+    if(sec < 10)
+        result += '0';
+    result += sec;
+
+    return result;
 }

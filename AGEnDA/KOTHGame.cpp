@@ -18,7 +18,7 @@
 KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
     : Game(hw, "King of the Hill", "KOTH", kothID, KOTH_NUM_SETTINGS),
       timeToCap(5),
-      timePerTeam(10),
+      timePerTeam(600),
       activeTeam("none"),
       capturingTeam("none"),
       gameIsInProgress(true),
@@ -29,13 +29,10 @@ KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
 {
     lcd = hardware->getLCD();
 
-    // Keeps time in seconds
-    bluTime = redTime = timePerTeam * 60;
+    // TODO this won't update properly after settings stuff
+    bluTime = redTime = timePerTeam;
 
     // Initialize Tweakable Game Settings
-    int capTimeOpts[]  = {2, 3, 5, 10, 0};
-    int teamTimeOpts[] = {2, 3, 5, 10, 0};
-
     GameOption capTimeOpt  = {"Cap Time",   &capTimeOpts[0],    &timeToCap};
     GameOption teamTimeOpt = {"Team Time",  &teamTimeOpts[0],   &timePerTeam};
 
