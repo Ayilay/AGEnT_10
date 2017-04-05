@@ -15,12 +15,12 @@
 #include "HardwareMap.h"
 #include "TimeManager.h"
 
-CSGOGame::CSGOGame(HardwareMap* hw, int CSGO_ID)
-    : Game(hw, "CS:GO Competitive", "CS:GO", CSGO_ID),
+CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
+    : Game(hw, "CS:GO Competitive", "CS:GO", csgoID, CSGO_NUM_SETTINGS),
       armTime(5),
       defuseTime(7),
       password("7355608"),
-      timeUntilBoom(70),
+      timeUntilBoom(35),
       prevButtonState(0),
       gameOver(false),
       arming(false),
@@ -30,6 +30,19 @@ CSGOGame::CSGOGame(HardwareMap* hw, int CSGO_ID)
       timeArmComplete(0L)
 {
     lcd = hardware->getLCD();
+
+    // Initialize Tweakable Game Settings
+    int armTimeOpts[]  = {2, 3, 5, 10, 0};
+    int defTimeOpts[]  = {2, 3, 5, 10, 0};
+    int boomTimeOpts[] = {35, 45, 60, 90, 120, 0};
+
+    GameOption armTimeOpt  = {"Arm Time",       &armTimeOpts[0],  &armTime};
+    GameOption defTimeOpt  = {"Defuse Time",    &defTimeOpts[0],  &defuseTime};
+    GameOption boomTimeOpt = {"TimeTillBoom",   &boomTimeOpts[0], &timeUntilBoom};
+
+    gameSettings[0] = armTimeOpt;
+    gameSettings[1] = defTimeOpt;
+    gameSettings[2] = boomTimeOpt;
 }
 
 ////////////////////////////////////////////////////////////
@@ -74,6 +87,11 @@ void CSGOGame::doEndGame()
         digitalWrite(hardware->ledBLU, LOW);
         digitalWrite(hardware->ledRED, HIGH);
     }
+}
+
+GameOption* CSGOGame::getGameOptions()
+{
+    return gameSettings;
 }
 
 ////////////////////////////////////////////////////////////

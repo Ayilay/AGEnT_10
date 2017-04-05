@@ -69,15 +69,12 @@ Game* gameList[NUMGAMES];
 Game* gameSelected;
 
 // Displays main menu and game settings menu for each game
-// TODO: Add gameList parameter somehow
 MenuManager menuManager(&hardwareMap);
 
 ////////////////////////////////////////////////////////////
 // Main Gameplay Methods
 ////////////////////////////////////////////////////////////
 
-// TODO List:
-// Display game options (once game is selected)
 void setup()
 {
     pinMode(ledRED,    OUTPUT);
@@ -123,7 +120,6 @@ void setup()
     lcd.setCursor(0, 1);
     lcd.print(gameSelected->getGameName());
     delay(1000);
-
 }
 
 void loop()

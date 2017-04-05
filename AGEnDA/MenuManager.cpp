@@ -61,31 +61,23 @@ int MenuManager::displayMainMenu()
         }
 
         // Scroll Detection
-        int pinAState = digitalRead(hw->encoderPinA);
-        if (prevEncoderPinAState == HIGH && pinAState != prevEncoderPinAState) // Signal A goes from high to low
-        //if (pinAState)
+        int encoderDirection = getEncoderScrollDirection();
+        if (encoderDirection == 1)
         {
-            Serial.println("Encoder moved!");
-            // Clockwise
-            if (digitalRead(hw->encoderPinB))
-            {
-                cursorY++;
-                if (cursorY >= capacity) cursorY = 0;
-            }
-            // Counter Clockwise
-            else
-            {
-                cursorY--;
-                if (cursorY < 0) cursorY = capacity - 1;
-            }
+            cursorY++;
+            if (cursorY >= capacity) cursorY = 0;
         }
-        // Select Button is encoder button and follows inverse logic (HIGH = not pressed)
+        else if (encoderDirection == -1)
+        {
+            cursorY--;
+            if (cursorY < 0) cursorY = capacity - 1;
+        }
+
+        // Button detection
         if (!digitalRead(selectorButton))
         {
             return cursorY;
         }
-
-        prevEncoderPinAState = pinAState;
 
         if (digitalRead(altMenuButton))
         {
@@ -97,20 +89,85 @@ int MenuManager::displayMainMenu()
     }
 }
 
-void MenuManager::displayGameMenu(int selectedGame)
+void MenuManager::displayGameMenu(int selectedGameID)
 {
     const int& backButton     = hw->buttonBLU;      // Goes back to the main menu
     const int& selectorButton = hw->encoderButton;  // Proceeds to gameplay for selected game
 
+    // If the selected game doesn't have any editable game settings, exit this menu
+    Game* selectedGame = gameList[selectedGameID];
+    int numSettings = selectedGame->getNumSettings();
+    if (numSettings == 0) return;
+
+    int cursorY = 0;
+    int capacity = min(numSettings, hw->numLCDRows-1);
+
+    GameOption* options = selectedGame->getGameOptions();
     while (true)
     {
         lcd->clear();
 
         lcd->print("Options for ");
-        lcd->print(gameList[selectedGame]->getShortName());
+        lcd->print(selectedGame->getShortName());
+
+        // Display as many game settings as can fit on a display at once
+        for (int i = 0; i < capacity; i++)
+        {
+            lcd->setCursor(0, i+1);
+
+            if (i == cursorY) lcd->print("> ");
+            else              lcd->print("  ");
+
+            lcd->print(options[i].optionName);
+
+        }
+
+        // Scroll Detection
+        int encoderDirection = getEncoderScrollDirection();
+        if (encoderDirection == 1)
+        {
+            cursorY++;
+            if (cursorY >= capacity) cursorY = 0;
+        }
+        else if (encoderDirection == -1)
+        {
+            cursorY--;
+            if (cursorY < 0) cursorY = capacity - 1;
+        }
+
+        // Select Button is encoder button and follows inverse logic (HIGH = not pressed)
+        if (!digitalRead(selectorButton))
+        {
+            // TODO enter setting-specific tweak menu
+        }
 
         if (digitalRead(backButton)) return;
 
         delay(50);
     }
+}
+
+// Returns -1, 0, or 1 depending on scroll direction of rotary encoder
+int MenuManager::getEncoderScrollDirection()
+{
+    int pinAState = digitalRead(hw->encoderPinA);
+
+    int dir = 0;
+
+    if (prevEncoderPinAState == HIGH && pinAState != prevEncoderPinAState) // Signal A goes from high to low
+    {
+        if (digitalRead(hw->encoderPinB))
+        {
+            // Clockwise
+            dir = 1;
+        }
+        else
+        {
+            // Counter Clockwise
+            dir = -1;
+        }
+    }
+
+    prevEncoderPinAState = pinAState;
+    return dir;
 }

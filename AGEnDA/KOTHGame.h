@@ -12,6 +12,8 @@
 #include "HardwareMap.h"
 #include "Game.h"
 
+#define KOTH_NUM_SETTINGS 2
+
 class KOTHGame : public Game
 {
     public:
@@ -22,8 +24,13 @@ class KOTHGame : public Game
         void doGameLoop();
         void doEndGame();
 
+        GameOption* getGameOptions();
+
     private:
         LiquidCrystal* lcd;     // Points to the lcd stored in HardwareMap for convenience
+
+        // Game Options
+        GameOption gameSettings[KOTH_NUM_SETTINGS];
 
         // Game Constants
         const int timeToCap;    // The time necessary to capture the control point (in seconds)

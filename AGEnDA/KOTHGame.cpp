@@ -15,8 +15,8 @@
 #include "HardwareMap.h"
 #include "TimeManager.h"
 
-KOTHGame::KOTHGame(HardwareMap* hw, int KOTH_ID)
-    : Game(hw, "King of the Hill", "KOTH", KOTH_ID),
+KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
+    : Game(hw, "King of the Hill", "KOTH", kothID, KOTH_NUM_SETTINGS),
       timeToCap(5),
       timePerTeam(10),
       activeTeam("none"),
@@ -31,6 +31,16 @@ KOTHGame::KOTHGame(HardwareMap* hw, int KOTH_ID)
 
     // Keeps time in seconds
     bluTime = redTime = timePerTeam * 60;
+
+    // Initialize Tweakable Game Settings
+    int capTimeOpts[]  = {2, 3, 5, 10, 0};
+    int teamTimeOpts[] = {2, 3, 5, 10, 0};
+
+    GameOption capTimeOpt  = {"Cap Time",   &capTimeOpts[0],    &timeToCap};
+    GameOption teamTimeOpt = {"Team Time",  &teamTimeOpts[0],   &timePerTeam};
+
+    gameSettings[0] = capTimeOpt;
+    gameSettings[1] = teamTimeOpt;
 }
 
 ////////////////////////////////////////////////////////////
@@ -59,6 +69,11 @@ void KOTHGame::doEndGame()
     lcd->clear();
     lcd->setCursor((hardware->numLCDCols - message.length()) / 2, 1);
     lcd->print(message);
+}
+
+GameOption* KOTHGame::getGameOptions()
+{
+    return gameSettings;
 }
 
 ////////////////////////////////////////////////////////////

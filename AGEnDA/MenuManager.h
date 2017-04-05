@@ -21,14 +21,17 @@ class MenuManager
         HardwareMap* hw;
         LiquidCrystal* lcd;
         Game** gameList;
-        int prevEncoderPinAState; // For detecting the direction of rotation from the rotary encoder
+
+        // Rotary Encoder direction handling
+        int prevEncoderPinAState;
+        int getEncoderScrollDirection();
 
     public:
         MenuManager(HardwareMap* _hw);
 
         void initGameList(Game** _gameList);
         int displayMainMenu();
-        void displayGameMenu(int selectedGame);
+        void displayGameMenu(int selectedGameID);
 };
 
 #endif

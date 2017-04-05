@@ -12,6 +12,8 @@
 #include "HardwareMap.h"
 #include "Game.h"
 
+#define CSGO_NUM_SETTINGS 3
+
 class CSGOGame : public Game
 {
     public:
@@ -22,8 +24,13 @@ class CSGOGame : public Game
         void doGameLoop();
         void doEndGame();
 
+        GameOption* getGameOptions();
+
     private:
         LiquidCrystal* lcd;         // Points to the lcd stored in HardwareMap for convenience
+
+        // Game Options
+        GameOption gameSettings[CSGO_NUM_SETTINGS];
 
         // Game Constants
         const int armTime;          // Time it takes to arm the bomb (seconds)
