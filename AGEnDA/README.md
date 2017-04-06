@@ -31,7 +31,7 @@ Any suggestions for game modes are welcome. I have tried to make adding a game m
 - [x] Add settings for each Game Mode that are accessible at boot time
 - [ ] Remember settings accross boot (still wondering about this one)
 - [ ] Add javadocs-style documentation to everything
-- [ ] Add descriptions of game modes in game mode files
+- [X] Add descriptions of game modes in game mode files
 - [ ] Add pausing
 - [ ] Make MenuManager scroll automatically for text that is too long
 - [ ] Add flexibility for displays of different sizes
