@@ -17,11 +17,12 @@
  * Instructions of how to play these game modes is included in the respective .h files
  *
  * This sketch produces a main menu at boot time that allows for selection of a
- * gamemode to play. A "Game Mode Menu" shows up that allows for configuration of
- * certain game-state variables. The game then proceeds once until completion,
- * and the device must be rebooted to play again.
+ * gamemode to play. When a game is selected, the "Menu" button can be clicked to
+ * open a "game settings menu" that allows for modification of certain in-game variables.
+ * After the user is satisfied with the settings, the game then starts andproceeds 
+ * once until completion, and the device must be rebooted to play again.
  *
- * Behaviour of each Game Mode is included in the respective <GameMode> class.
+ * Behaviour of each Game Mode is defined in the respective <GameMode> class.
  * All Game Modes implement the Game interface, defined in Game.h
  *
  * Concept and Software by George Troulis

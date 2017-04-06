@@ -5,7 +5,16 @@
  *
  * Defines behavior for KOTH Game Mode
  *
- * TODO: Add instructions
+ * Instructions for gameplay:
+ * Two teams, RED and BLU, fight for the "Control Point" (this device), placed in the center of the map. Each team
+ * is given a timer of some time, and the objective of each team is to make their timer count down to 0.
+ * For a team to make their timer count down, a team must approach the control point and hold down the button
+ * of their color for a pre-determined capture time. The control point then switches possession and counts down
+ * until it is captured by the opposing team or until time runs out.
+ *
+ * Tweakable Game Settings:
+ *  -> Cap Time: The amount of time it takes each team to capture the control point
+ *  -> Team Time: The starting amount of time that each team is given. When it reaches zero for a team, that team wins
 */
 
 #include <Arduino.h>

@@ -5,7 +5,17 @@
  *
  * Defines behavior for CSGO Game Mode
  *
- * TODO: Add instructions
+ * Instructions for gameplay:
+ * The Terrorists have a plantable Bomb in their possession (this device) when the game starts, and can carry it with them.
+ * The terrorists must plant this bomb at some designated bomb site, arm it, and have it count down and explode to win.
+ * The Conuter Terrorists must either eliminate the entire Terrorist team before a bomb is planted, or defuse the bomb
+ * to win. To arm or defuse the bomb, both RED and BLU buttons must be held for some amount of time
+ *
+ * Tweakable Game Settings:
+ *  -> Arm Time: The amount of time that the buttons must be held down by for the bomb to become armed
+ *  -> Defuse Time: The amount of time that the buttons must be held down by for the bomb to become defused
+ *  -> TimeTilBoom: The amount of time that it takes for the bomb to explode once armed
+ *
 */
 
 #include <Arduino.h>
