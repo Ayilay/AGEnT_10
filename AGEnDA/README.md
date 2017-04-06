@@ -12,9 +12,9 @@ AGEnDA.ino        | The main Arduino sketch file. Initializes all IO and holds t
 TimeManager.h     | Holds a static method that returns the global time rounded to 50 ms for global timing purposes
 HardwareMap.h     | Holds the value of every single IO port for global reference
 MenuManager class | Responsible for rendering the main game selection menu as well as submenus for game-specific settings
-Game.h            | An interface that all _Game Modes_ must implement
-KOTHGame class    | Defines behaviour of the KOTH game mode; implements Game
-CSGOGame class    | Defines behaviour of the CSGO game mode; implements Game
+Game.h            | An abstract class that all _Game Modes_ must extend
+KOTHGame class    | Defines behaviour of the KOTH game mode; extends Game
+CSGOGame class    | Defines behaviour of the CSGO game mode; extends Game
 
 
 ## Contributing/Adding additional Game Modes
@@ -22,12 +22,13 @@ CSGOGame class    | Defines behaviour of the CSGO game mode; implements Game
 Any suggestions for game modes are welcome. I have tried to make adding a game mode fairly modular, here is how to add a new one:
 1) Create a _MyGameMode_ class that extends the Game class. Look at the existing game modes for an idea of how to do that
 2) Update the __NUMGAMES__ constant in Game.h
-3) Initialise your game mode in AGEnDA.ino by passing into its constructor the address of hardwareMap and a unique numeric ID that will reflect its index in the gameList array.
-4) Manually add the address of your game mode object to the gameList array in the `setup()` function.
+3) Initialise your game mode in AGEnDA.ino by passing into its constructor the address of hardwareMap and a unique numeric ID that will reflect its index in the gameList array
+4) Manually add the address of your game mode object to the gameList array in the `setup()` function
 5) Implement the inherited methods of Game inside your game mode .cpp file, and implement your own functionality via private methods
+6) Add your own settings and initialize them in the constructor of your gamemode. Make sure your "option parameters" array ends with a 0. Make sure to define your own GameOption array in the header file and return it in the source file
 
 ## Current TODO/Wish List
-- [ ] Add settings for each Game Mode that are accessible at boot time
+- [x] Add settings for each Game Mode that are accessible at boot time
 - [ ] Remember settings accross boot (still wondering about this one)
 - [ ] Add javadocs-style documentation to everything
 - [ ] Add descriptions of game modes in game mode files
