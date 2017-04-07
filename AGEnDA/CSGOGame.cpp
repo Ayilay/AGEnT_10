@@ -70,10 +70,9 @@ bool CSGOGame::isPlaying()
 
 void CSGOGame::doGameLoop()
 {
-    unsigned long globalTime = TimeManager::getTime();
-    updateDisplay(globalTime);
-    updateArmStatus(globalTime);
-    countDown(globalTime);
+    updateDisplay();
+    updateArmStatus();
+    countDown();
 }
 
 void CSGOGame::doEndGame()
@@ -112,9 +111,11 @@ GameOption* CSGOGame::getGameOptions()
 // Private Gameplay methods
 ////////////////////////////////////////////////////////////
 
-void CSGOGame::updateDisplay(unsigned long globalTime)
+void CSGOGame::updateDisplay()
 {
     lcd->clear();
+
+    unsigned long int globalTime = TimeManager::getTime();
 
     // Phase 1: Waiting for bomb to become armed
     if (!arming)
@@ -183,9 +184,11 @@ void CSGOGame::updateDisplay(unsigned long globalTime)
     }
 }
 
-void CSGOGame::updateArmStatus(unsigned long globalTime)
+void CSGOGame::updateArmStatus()
 {
     int currentButtonState = digitalRead(HardwareMap::buttonRED) & digitalRead(HardwareMap::buttonBLU);
+
+    unsigned long int globalTime = TimeManager::getTime();
 
     // Commence the arming/defusing process if it's the first time pushing the button OR if we've already started
     if (currentButtonState == HIGH && (arming || prevButtonState == LOW))
@@ -221,11 +224,12 @@ void CSGOGame::updateArmStatus(unsigned long globalTime)
     prevButtonState = currentButtonState;
 }
 
-void CSGOGame::countDown(unsigned long globalTime)
+void CSGOGame::countDown()
 {
     if (!armed) return;
     if (timeUntilBoom <= 0) gameOver = true;
 
+    unsigned long globalTime = TimeManager::getTime();
     unsigned long timeSinceArmComplete = globalTime - timeArmComplete;
     if (timeSinceArmComplete > 1000)
     {

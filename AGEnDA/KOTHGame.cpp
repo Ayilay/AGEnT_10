@@ -72,15 +72,14 @@ void KOTHGame::doGameLoop()
     if (!digitalRead(HardwareMap::encoderButton) && prevEncButtonState == HIGH)
     {
         paused = !paused;
-        updateDisplay(0);
+        updateDisplay();
     }
 
     if (!paused)
     {
-        unsigned long globalTime = TimeManager::getTime();
-        updateDisplay(globalTime);
-        updateCaptureProgress(globalTime);
-        updateTimers(globalTime);
+        updateDisplay();
+        updateCaptureProgress();
+        updateTimers();
     }
 
     prevEncButtonState = digitalRead(HardwareMap::encoderButton);
@@ -106,7 +105,7 @@ GameOption* KOTHGame::getGameOptions()
 // Private Gameplay methods
 ////////////////////////////////////////////////////////////
 
-void KOTHGame::updateDisplay(unsigned long globalTime)
+void KOTHGame::updateDisplay()
 {
     lcd->clear();
 
@@ -182,7 +181,7 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
 }
 
 // Detects buttons being pushed down and reacts accordingly
-void KOTHGame::updateCaptureProgress(unsigned long globalTime)
+void KOTHGame::updateCaptureProgress()
 {
     int currentButtonState = digitalRead(HardwareMap::buttonRED) ^ digitalRead(HardwareMap::buttonBLU);
     if (currentButtonState == HIGH)
@@ -191,6 +190,8 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
 
         if (capturingTeam != activeTeam)
         {
+            int globalTime = TimeManager::getTime();
+
             // Update the timeInitCaputing only the first time the capture button is being pressed
             if (currentButtonState != prevButtonState) timeInitCapturing = globalTime;
 
@@ -230,7 +231,7 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
     prevButtonState = currentButtonState;
 }
 
-void KOTHGame::updateTimers(unsigned long globalTime)
+void KOTHGame::updateTimers()
 {
     if (activeTeam == "none") return;
 
@@ -242,7 +243,7 @@ void KOTHGame::updateTimers(unsigned long globalTime)
         return;
     }
 
-    unsigned long timeOwnedElapsed = globalTime - timeInitCountDown;
+    unsigned long timeOwnedElapsed = TimeManager::getTime() - timeInitCountDown;
 
     if (timeOwnedElapsed > 1000)
     {

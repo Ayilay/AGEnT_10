@@ -54,9 +54,9 @@ class CSGOGame : public Game
         unsigned long timeArmComplete;     // Time since bomb was armed (for count down)
 
         // Gameplay Methods
-        void updateDisplay(unsigned long globalTime);   // Updates the lcd with important game state stuff
-        void updateArmStatus(unsigned long globalTime); // Handles real-time arming/defusing of the bomb
-        void countDown(unsigned long globalTime);       // Counts down the bomb if it is armed
+        void updateDisplay();   // Updates the lcd with important game state stuff
+        void updateArmStatus(); // Handles real-time arming/defusing of the bomb
+        void countDown();       // Counts down the bomb if it is armed
         String formatTime();                            // Formats the bomb time into mm:ss string
 };
 
