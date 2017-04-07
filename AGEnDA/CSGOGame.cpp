@@ -15,7 +15,6 @@
  * -> BLU Button: nothing by itself
  * -> RED Button: nothing by itself
  * -> BLU and RED Buttons together: Hold to Arm the bomb (if not armed) or to defuse the bomb (if armed)
- * -> Encoder Button: Pause the game (TODO WIP)
  *
  * Tweakable Game Settings:
  *  -> Arm Time: The amount of time that the buttons must be held down by for the bomb to become armed

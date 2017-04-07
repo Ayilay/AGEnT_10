@@ -43,6 +43,8 @@ class KOTHGame : public Game
         // Game State Variables
         int redTime, bluTime;   // Stores the times of the 2 teams
         int prevButtonState;    // For capturing: keeps track of if "button state" changes
+        int prevEncButtonState; // For pausing: similar as above but for the encoder
+        bool paused;            // If true, gameplay is suspended until false again
         bool gameIsInProgress;  // When false, game ends
         String activeTeam;      // Team whoose timer is currently counting down
         String capturingTeam;   // Team currently capping the point

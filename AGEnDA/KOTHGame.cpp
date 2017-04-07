@@ -15,7 +15,7 @@
  * Controls:
  * -> BLU Button: Hold down to capture the Control Point for the BLU team
  * -> RED Button: Hold down to capture the Control Point for the RED team
- * -> Encoder Button: Pause the game (TODO WIP)
+ * -> Encoder Button: Pause the game
  *
  * Tweakable Game Settings:
  *  -> Cap Time: The amount of time it takes each team to capture the control point
@@ -36,6 +36,7 @@ KOTHGame::KOTHGame(int kothID)
       activeTeam("none"),
       capturingTeam("none"),
       gameIsInProgress(true),
+      paused(false),
       timeInitCapturing(0L),
       capturingTime(0L),
       timeInitCountDown(0L),
@@ -68,10 +69,21 @@ bool KOTHGame::isPlaying()
 
 void KOTHGame::doGameLoop()
 {
-    unsigned long globalTime = TimeManager::getTime();
-    updateDisplay(globalTime);
-    updateCaptureProgress(globalTime);
-    updateTimers(globalTime);
+    if (!digitalRead(HardwareMap::encoderButton) && prevEncButtonState == HIGH)
+    {
+        paused = !paused;
+        updateDisplay(0);
+    }
+
+    if (!paused)
+    {
+        unsigned long globalTime = TimeManager::getTime();
+        updateDisplay(globalTime);
+        updateCaptureProgress(globalTime);
+        updateTimers(globalTime);
+    }
+
+    prevEncButtonState = digitalRead(HardwareMap::encoderButton);
 }
 
 void KOTHGame::doEndGame()
@@ -160,6 +172,13 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
 
     lcd->setCursor(13, 3);
     lcd->print(formatTime(redTime));
+
+    if (paused)
+    {
+        String message = "[[--Paused--]]";
+        lcd->setCursor((HardwareMap::numLCDCols - message.length())/2, 1);
+        lcd->print(message);
+    }
 }
 
 // Detects buttons being pushed down and reacts accordingly
