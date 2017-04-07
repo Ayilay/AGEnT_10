@@ -14,6 +14,9 @@
 
 class TimeManager
 {
+    private:
+        TimeManager(); // Prevent initialization since this is a static class
+
     public:
         // Return global time rounded to 50 ms intervals
         static unsigned long getTime()
