@@ -18,7 +18,6 @@
 class MenuManager
 {
     private:
-        HardwareMap* hw;
         LiquidCrystal* lcd;
         Game** gameList;
 
@@ -32,7 +31,7 @@ class MenuManager
         String formatSecondsToMMSS(int seconds);
 
     public:
-        MenuManager(HardwareMap* _hw);
+        MenuManager();
 
         void initGameList(Game** _gameList);
         int displayMainMenu();

@@ -17,7 +17,7 @@
 class KOTHGame : public Game
 {
     public:
-        KOTHGame(HardwareMap* hw, int KOTH_ID);
+        KOTHGame(int KOTH_ID);
 
         // Inherited virtual methods from Game
         void init();

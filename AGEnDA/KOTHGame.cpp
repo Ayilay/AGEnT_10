@@ -24,8 +24,8 @@
 #include "HardwareMap.h"
 #include "TimeManager.h"
 
-KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
-    : Game(hw, "King of the Hill", "KOTH", kothID, KOTH_NUM_SETTINGS),
+KOTHGame::KOTHGame(int kothID)
+    : Game("King of the Hill", "KOTH", kothID, KOTH_NUM_SETTINGS),
       timeToCap(5),
       timePerTeam(600),
       activeTeam("none"),
@@ -36,8 +36,6 @@ KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
       timeInitCountDown(0L),
       prevButtonState(0)
 {
-    lcd = hardware->getLCD();
-
     // Initialize Tweakable Game Settings
     GameOption capTimeOpt  = {"Cap Time",   &capTimeOpts[0],    &timeToCap};
     GameOption teamTimeOpt = {"Team Time",  &teamTimeOpts[0],   &timePerTeam};
@@ -52,6 +50,8 @@ KOTHGame::KOTHGame(HardwareMap* hw, int kothID)
 
 void KOTHGame::init()
 {
+    lcd = HardwareMap::getLCD();
+
     // timePerTeam was set during the gameSettings menu, still need to update the team times
     bluTime = redTime = timePerTeam;
 }
@@ -71,12 +71,12 @@ void KOTHGame::doGameLoop()
 
 void KOTHGame::doEndGame()
 {
-    digitalWrite(hardware->ledRED, HIGH);
-    digitalWrite(hardware->ledBLU, HIGH);
+    digitalWrite(HardwareMap::ledRED, HIGH);
+    digitalWrite(HardwareMap::ledBLU, HIGH);
 
     String message = activeTeam + " won!";
     lcd->clear();
-    lcd->setCursor((hardware->numLCDCols - message.length()) / 2, 1);
+    lcd->setCursor((HardwareMap::numLCDCols - message.length()) / 2, 1);
     lcd->print(message);
 }
 
@@ -99,7 +99,7 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
     // Print the capture progress if we are capturing
     if (capturingTime > 0)
     {
-        int captureProgress = ((hardware->numLCDCols-2)/((double) timeToCap * 1000)) * capturingTime;
+        int captureProgress = ((HardwareMap::numLCDCols-2)/((double) timeToCap * 1000)) * capturingTime;
 
         // Display who is capturing
         lcd->setCursor(0, 0);
@@ -119,20 +119,20 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
             for(int i = 0; i < captureProgress; i++)
                 lcd->print('-');
 
-            digitalWrite(hardware->ledBLU, brightness);
+            digitalWrite(HardwareMap::ledBLU, brightness);
         }
         else
         {
             // For RED team, display capture progress from right to left
-            lcd->setCursor(hardware->numLCDCols - 1 - captureProgress, 1);
+            lcd->setCursor(HardwareMap::numLCDCols - 1 - captureProgress, 1);
             for(int i = 0; i < captureProgress; i++)
                 lcd->print('-');
 
-            digitalWrite(hardware->ledRED, brightness);
+            digitalWrite(HardwareMap::ledRED, brightness);
         }
 
 
-        lcd->setCursor(hardware->numLCDCols - 1, 1);
+        lcd->setCursor(HardwareMap::numLCDCols - 1, 1);
         lcd->print("|");
     }
     else
@@ -160,10 +160,10 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
 // Detects buttons being pushed down and reacts accordingly
 void KOTHGame::updateCaptureProgress(unsigned long globalTime)
 {
-    int currentButtonState = digitalRead(hardware->buttonRED) ^ digitalRead(hardware->buttonBLU);
+    int currentButtonState = digitalRead(HardwareMap::buttonRED) ^ digitalRead(HardwareMap::buttonBLU);
     if (currentButtonState == HIGH)
     {
-        capturingTeam = digitalRead(hardware->buttonRED) ? "RED" : "BLU";
+        capturingTeam = digitalRead(HardwareMap::buttonRED) ? "RED" : "BLU";
 
         if (capturingTeam != activeTeam)
         {
@@ -182,18 +182,18 @@ void KOTHGame::updateCaptureProgress(unsigned long globalTime)
 
                 if (activeTeam == "RED")
                 {
-                    digitalWrite(hardware->ledRED, HIGH);
-                    digitalWrite(hardware->ledBLU, LOW);
+                    digitalWrite(HardwareMap::ledRED, HIGH);
+                    digitalWrite(HardwareMap::ledBLU, LOW);
                 }
                 else if (activeTeam == "BLU")
                 {
-                    digitalWrite(hardware->ledBLU, HIGH);
-                    digitalWrite(hardware->ledRED, LOW);
+                    digitalWrite(HardwareMap::ledBLU, HIGH);
+                    digitalWrite(HardwareMap::ledRED, LOW);
                 }
                 else
                 {
-                    digitalWrite(hardware->ledRED, LOW);
-                    digitalWrite(hardware->ledBLU, LOW);
+                    digitalWrite(HardwareMap::ledRED, LOW);
+                    digitalWrite(HardwareMap::ledBLU, LOW);
                 }
             }
         }

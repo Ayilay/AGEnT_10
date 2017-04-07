@@ -12,10 +12,10 @@
 #include "MenuManager.h"
 #include "TimeManager.h"
 
-MenuManager::MenuManager(HardwareMap* _hw)
-    : hw(_hw), prevEncoderPinAState(LOW)
+MenuManager::MenuManager()
+    : prevEncoderPinAState(LOW)
 {
-    lcd = hw->getLCD();
+    lcd = HardwareMap::getLCD();
 }
 
 void MenuManager::initGameList(Game** _gameList)
@@ -34,18 +34,18 @@ void MenuManager::initGameList(Game** _gameList)
 */
 int MenuManager::displayMainMenu()
 {
-    const int& altMenuButton  = hw->buttonRED;      // Opens menu for specific game
-    const int& selectorButton = hw->encoderButton;  // Proceeds to gameplay for selected game
+    const int& altMenuButton  = HardwareMap::buttonRED;      // Opens menu for specific game
+    const int& selectorButton = HardwareMap::encoderButton;  // Proceeds to gameplay for selected game
 
     int cursorY = 0;
-    int capacity = min(NUMGAMES, hw->numLCDRows-1); // Scroll until out of rows, or out of games if NUMGAMES < numRows
+    int capacity = min(NUMGAMES, HardwareMap::numLCDRows-1); // Scroll until out of rows, or out of games if NUMGAMES < numRows
 
     while (true)
     {
         // Update the LEDs in a sinusoidal fashion for fanciness
         int brightness = 101 + 100 * sin(TimeManager::getTime() * 2.0 * PI / 2500.0);
-        analogWrite(hw->ledRED, brightness);
-        analogWrite(hw->ledBLU, brightness);
+        analogWrite(HardwareMap::ledRED, brightness);
+        analogWrite(HardwareMap::ledBLU, brightness);
 
         // Display everything on the screen
         lcd->clear();
@@ -92,8 +92,8 @@ int MenuManager::displayMainMenu()
 
 void MenuManager::displayGameMenu(int selectedGameID)
 {
-    const int& backButton     = hw->buttonBLU;      // Goes back to the main menu
-    const int& selectorButton = hw->encoderButton;  // Proceeds to modify selected game option
+    const int& backButton     = HardwareMap::buttonBLU;      // Goes back to the main menu
+    const int& selectorButton = HardwareMap::encoderButton;  // Proceeds to modify selected game option
 
     // If the selected game doesn't have any editable game settings, exit this menu
     Game* selectedGame = gameList[selectedGameID];
@@ -101,7 +101,7 @@ void MenuManager::displayGameMenu(int selectedGameID)
     if (numSettings == 0) return;
 
     int cursorY = 0;
-    int capacity = min(numSettings, hw->numLCDRows-1);
+    int capacity = min(numSettings, HardwareMap::numLCDRows-1);
 
     GameOption* options = selectedGame->getGameOptions();
     while (true)
@@ -155,8 +155,8 @@ void MenuManager::displayGameMenu(int selectedGameID)
 
 void MenuManager::displaySettingTweakMenu(int gameID, int settingID)
 {
-    const int& backButton     = hw->buttonBLU;      // Goes back to the game settings menu
-    const int& selectorButton = hw->encoderButton;  // Goes back to the game settings menu
+    const int& backButton     = HardwareMap::buttonBLU;      // Goes back to the game settings menu
+    const int& selectorButton = HardwareMap::encoderButton;  // Goes back to the game settings menu
 
     Game* selectedGame = gameList[gameID];
     GameOption option = (selectedGame->getGameOptions())[settingID];
@@ -177,11 +177,11 @@ void MenuManager::displaySettingTweakMenu(int gameID, int settingID)
     while (true)
     {
         lcd->clear();
-        lcd->setCursor((hw->numLCDCols - option.optionName.length()) / 2, 0);
+        lcd->setCursor((HardwareMap::numLCDCols - option.optionName.length()) / 2, 0);
         lcd->print(option.optionName);
 
         String option_str = formatSecondsToMMSS(optionPossibilities[optionIndex]);
-        lcd->setCursor((hw->numLCDCols - option_str.length()) / 2, 1);
+        lcd->setCursor((HardwareMap::numLCDCols - option_str.length()) / 2, 1);
         lcd->print(option_str);
 
         // Scroll Detection
@@ -216,13 +216,13 @@ void MenuManager::displaySettingTweakMenu(int gameID, int settingID)
 // Returns -1, 0, or 1 depending on scroll direction of rotary encoder
 int MenuManager::getEncoderScrollDirection()
 {
-    int pinAState = digitalRead(hw->encoderPinA);
+    int pinAState = digitalRead(HardwareMap::encoderPinA);
 
     int dir = 0;
 
     if (prevEncoderPinAState == HIGH && pinAState != prevEncoderPinAState) // Signal A goes from high to low
     {
-        if (digitalRead(hw->encoderPinB))
+        if (digitalRead(HardwareMap::encoderPinB))
         {
             // Clockwise
             dir = 1;

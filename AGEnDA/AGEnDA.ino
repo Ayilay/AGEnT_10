@@ -40,28 +40,13 @@
 #include "CSGOGame.h"
 
 ////////////////////////////////////////////////////////////
-// Constants, IO pins, and other initializations
+// GameMode Initializations
 ////////////////////////////////////////////////////////////
 
-const int LCDNUMROWS =  4;
-const int LCDNUMCOLS = 20;
-
-const int buttonRED     =  8;
-const int buttonBLU     =  9;
-const int ledRED        = 10;
-const int ledBLU        = 11;
-const int encoderPinA   = 12;
-const int encoderPinB   = 13;
-const int encoderButton = A0;
-
-LiquidCrystal lcd(2, 3, 4, 5, 6, 7);
-
-// For sharing all hardware pins across entire software
-HardwareMap hardwareMap(ledRED, ledBLU, buttonRED, buttonBLU, encoderPinA, encoderPinB, encoderButton,  &lcd, LCDNUMROWS, LCDNUMCOLS);
-
 // The individual games that we can play to be stored in gameList later
-KOTHGame kothGame(&hardwareMap, 0);
-CSGOGame csgoGame(&hardwareMap, 1);
+// Initialized statically for convenience of memory handling
+KOTHGame kothGame(0);
+CSGOGame csgoGame(1);
 
 // Stores all Games in an array for convenience of iteration
 Game* gameList[NUMGAMES];
@@ -69,57 +54,46 @@ Game* gameList[NUMGAMES];
 // The game that's currently selected to play
 Game* gameSelected;
 
-// Displays main menu and game settings menu for each game
-MenuManager menuManager(&hardwareMap);
-
 ////////////////////////////////////////////////////////////
 // Main Gameplay Methods
 ////////////////////////////////////////////////////////////
 
 void setup()
 {
-    pinMode(ledRED,    OUTPUT);
-    pinMode(ledBLU,    OUTPUT);
-    pinMode(buttonRED,  INPUT);
-    pinMode(buttonBLU,  INPUT);
+    // Initialize all the I/O and the LCD
+    HardwareMap::init();
 
-    pinMode(encoderPinA,   INPUT);
-    pinMode(encoderPinB,   INPUT);
-    pinMode(encoderButton, INPUT);
-
-    if (LCDNUMCOLS < 20 || LCDNUMROWS < 4)
+    if (HardwareMap::numLCDCols < 20 || HardwareMap::numLCDRows < 4)
     {
         Serial.begin(9600);
         Serial.println("Device only supports LCD screens of 20x4 or larger");
 
-        // hopefully there is an at least 16x2 LCD
-        lcd.begin(16, 2);
-        lcd.clear();
-        lcd.print("Unsupported");
-        lcd.setCursor(0, 1);
-        lcd.print("LCD Dimensions");
+        HardwareMap::getLCD()->clear();
+        HardwareMap::getLCD()->print("Unsupported");
+        HardwareMap::getLCD()->setCursor(0, 1);
+        HardwareMap::getLCD()->print("LCD Dimensions");
 
         exit(0);
     }
-
-    lcd.begin(LCDNUMCOLS, LCDNUMROWS);
 
     // Manually add all games in array (gameList better be initialized correctly)
     gameList[kothGame.getID()] = &kothGame;
     gameList[csgoGame.getID()] = &csgoGame;
 
+    // Displays main menu and game settings menu for each game
+    MenuManager menuManager;
     menuManager.initGameList(gameList);
 
     // Display the menu, and grab the selected game
     gameSelected = gameList[menuManager.displayMainMenu()];
     gameSelected->init();
 
-    digitalWrite(ledRED, LOW);
-    digitalWrite(ledBLU, LOW);
-    lcd.clear();
-    lcd.print("Game Selected:");
-    lcd.setCursor(0, 1);
-    lcd.print(gameSelected->getGameName());
+    digitalWrite(HardwareMap::ledRED, LOW);
+    digitalWrite(HardwareMap::ledBLU, LOW);
+    HardwareMap::getLCD()->clear();
+    HardwareMap::getLCD()->print("Game Selected:");
+    HardwareMap::getLCD()->setCursor(0, 1);
+    HardwareMap::getLCD()->print(gameSelected->getGameName());
     delay(1000);
 }
 

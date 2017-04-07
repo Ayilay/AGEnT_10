@@ -15,35 +15,24 @@
 class HardwareMap
 {
     private:
-        LiquidCrystal* lcd;
+        HardwareMap(); // Prevent construction as this is a static class
+        static LiquidCrystal lcd;
 
     public:
-        const int ledRED;
-        const int ledBLU;
-        const int buttonRED;
-        const int buttonBLU;
-        const int encoderPinA;
-        const int encoderPinB;
-        const int encoderButton;
+        static const int buttonRED;
+        static const int buttonBLU;
+        static const int ledRED;
+        static const int ledBLU;
+        static const int encoderPinA;
+        static const int encoderPinB;
+        static const int encoderButton;
 
-        const int numLCDRows;
-        const int numLCDCols;
+        static const int numLCDRows;
+        static const int numLCDCols;
 
-        HardwareMap(int _ledRED, int _ledBLU, int _buttonRED, int _buttonBLU, int _encoderPinA, int _encoderPinB, int _encoderButton, LiquidCrystal* _lcd, int _numLCDRows, int _numLCDCols)
-            : ledRED(_ledRED),
-              ledBLU(_ledBLU),
-              buttonRED(_buttonRED),
-              buttonBLU(_buttonBLU),
-              encoderPinA(_encoderPinA),
-              encoderPinB(_encoderPinB),
-              encoderButton(_encoderButton),
-              lcd(_lcd),
-              numLCDRows(_numLCDRows),
-              numLCDCols(_numLCDCols)
-        {};
+        static void init();
 
-        LiquidCrystal* getLCD()
-        {   return lcd;  };
+        static LiquidCrystal* getLCD();
 };
 
 #endif

@@ -10,7 +10,7 @@ Class/Header file |Description
 ------------------|-----------
 AGEnDA.ino        | The main Arduino sketch file. Initializes all IO and holds the main setup/loop functions
 TimeManager.h     | Holds a static method that returns the global time rounded to 50 ms for global timing purposes
-HardwareMap.h     | Holds the value of every single IO port for global reference
+HardwareMap.h     | Static class that holds the value of every single IO port for global reference
 MenuManager class | Responsible for rendering the main game selection menu as well as submenus for game-specific settings
 Game.h            | An abstract class that all _Game Modes_ must extend
 KOTHGame class    | Defines behaviour of the KOTH game mode; extends Game
@@ -35,7 +35,7 @@ Any suggestions for game modes are welcome. I have tried to make adding a game m
 - [ ] Add pausing
 - [ ] Make MenuManager scroll automatically for text that is too long
 - [ ] Add flexibility for displays of different sizes
-- [ ] Make HardwareMap a static class
+- [X] Make HardwareMap a static class
 - [ ] Upload schematic files
 - [ ] Add speaker and sounds
 - [ ] Make a youtube video to demonstrate this project

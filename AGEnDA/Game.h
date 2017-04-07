@@ -30,11 +30,9 @@ class Game
         const String gameName;  // String that belongs to game for display purposes
         const String shortName; // A shorter version of gameName that's displayed for the settings menu
 
-        HardwareMap* hardware;
-
     public:
-        Game(HardwareMap* hw, String _gameName, String _shortName, int _gameID, int _numSettings)
-            : hardware(hw), gameName(_gameName), shortName(_shortName), gameID(_gameID), numSettings(_numSettings) {}
+        Game(String _gameName, String _shortName, int _gameID, int _numSettings)
+            : gameName(_gameName), shortName(_shortName), gameID(_gameID), numSettings(_numSettings) {}
 
         String getGameName()
         { return gameName; };

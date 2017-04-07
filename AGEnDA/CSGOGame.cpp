@@ -25,8 +25,8 @@
 #include "HardwareMap.h"
 #include "TimeManager.h"
 
-CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
-    : Game(hw, "CS:GO Competitive", "CS:GO", csgoID, CSGO_NUM_SETTINGS),
+CSGOGame::CSGOGame(int csgoID)
+    : Game("CS:GO Competitive", "CS:GO", csgoID, CSGO_NUM_SETTINGS),
       armTime(5),
       defuseTime(7),
       password("7355608"),
@@ -39,8 +39,6 @@ CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
       timeSpentArming(0L),
       timeArmComplete(0L)
 {
-    lcd = hardware->getLCD();
-
     // Initialize Tweakable Game Settings
     GameOption armTimeOpt  = {"Arm Time",       &armTimeOpts[0],  &armTime};
     GameOption defTimeOpt  = {"Defuse Time",    &defTimeOpts[0],  &defuseTime};
@@ -57,6 +55,7 @@ CSGOGame::CSGOGame(HardwareMap* hw, int csgoID)
 
 void CSGOGame::init()
 {
+    lcd = HardwareMap::getLCD();
 }
 
 bool CSGOGame::isPlaying()
@@ -85,8 +84,8 @@ void CSGOGame::doEndGame()
         lcd->setCursor(0, 2);
         lcd->print("win");
 
-        digitalWrite(hardware->ledBLU, HIGH);
-        digitalWrite(hardware->ledRED, LOW);
+        digitalWrite(HardwareMap::ledBLU, HIGH);
+        digitalWrite(HardwareMap::ledRED, LOW);
     }
     else
     {
@@ -94,8 +93,8 @@ void CSGOGame::doEndGame()
         lcd->setCursor(0, 1);
         lcd->print("Terrorists win");
 
-        digitalWrite(hardware->ledBLU, LOW);
-        digitalWrite(hardware->ledRED, HIGH);
+        digitalWrite(HardwareMap::ledBLU, LOW);
+        digitalWrite(HardwareMap::ledRED, HIGH);
     }
 }
 
@@ -128,8 +127,8 @@ void CSGOGame::updateDisplay(unsigned long globalTime)
             else                             blinkPeriod =  150;
 
             int brightness = 1 + sin((globalTime - timeArmComplete) * 2.0 * PI / blinkPeriod);
-            digitalWrite(hardware->ledRED, brightness);
-            digitalWrite(hardware->ledBLU, LOW);
+            digitalWrite(HardwareMap::ledRED, brightness);
+            digitalWrite(HardwareMap::ledBLU, LOW);
         }
     }
     else if (arming)
@@ -173,15 +172,15 @@ void CSGOGame::updateDisplay(unsigned long globalTime)
 
             // Blink the Blue LEDs to indicate defusing
             int brightness = 1 + sin((globalTime - timeArmComplete) * 2.0 * PI / 500);
-            digitalWrite(hardware->ledBLU, brightness);
-            digitalWrite(hardware->ledRED, LOW);
+            digitalWrite(HardwareMap::ledBLU, brightness);
+            digitalWrite(HardwareMap::ledRED, LOW);
         }
     }
 }
 
 void CSGOGame::updateArmStatus(unsigned long globalTime)
 {
-    int currentButtonState = digitalRead(hardware->buttonRED) & digitalRead(hardware->buttonBLU);
+    int currentButtonState = digitalRead(HardwareMap::buttonRED) & digitalRead(HardwareMap::buttonBLU);
 
     // Commence the arming/defusing process if it's the first time pushing the button OR if we've already started
     if (currentButtonState == HIGH && (arming || prevButtonState == LOW))
