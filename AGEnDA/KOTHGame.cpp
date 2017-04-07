@@ -5,12 +5,17 @@
  *
  * Defines behavior for KOTH Game Mode
  *
- * Instructions for gameplay:
+ * Game Mode Summary:
  * Two teams, RED and BLU, fight for the "Control Point" (this device), placed in the center of the map. Each team
  * is given a timer of some time, and the objective of each team is to make their timer count down to 0.
  * For a team to make their timer count down, a team must approach the control point and hold down the button
  * of their color for a pre-determined capture time. The control point then switches possession and counts down
  * until it is captured by the opposing team or until time runs out.
+ *
+ * Controls:
+ * -> BLU Button: Hold down to capture the Control Point for the BLU team
+ * -> RED Button: Hold down to capture the Control Point for the RED team
+ * -> Encoder Button: Pause the game (TODO WIP)
  *
  * Tweakable Game Settings:
  *  -> Cap Time: The amount of time it takes each team to capture the control point

@@ -5,11 +5,17 @@
  *
  * Defines behavior for CSGO Game Mode
  *
- * Instructions for gameplay:
+ * Game Mode Summary:
  * The Terrorists have a plantable Bomb in their possession (this device) when the game starts, and can carry it with them.
  * The terrorists must plant this bomb at some designated bomb site, arm it, and have it count down and explode to win.
  * The Conuter Terrorists must either eliminate the entire Terrorist team before a bomb is planted, or defuse the bomb
  * to win. To arm or defuse the bomb, both RED and BLU buttons must be held for some amount of time
+ *
+ * Controls:
+ * -> BLU Button: nothing by itself
+ * -> RED Button: nothing by itself
+ * -> BLU and RED Buttons together: Hold to Arm the bomb (if not armed) or to defuse the bomb (if armed)
+ * -> Encoder Button: Pause the game (TODO WIP)
  *
  * Tweakable Game Settings:
  *  -> Arm Time: The amount of time that the buttons must be held down by for the bomb to become armed
