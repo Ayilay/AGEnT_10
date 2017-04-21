@@ -36,9 +36,9 @@ class KOTHGame : public Game
         int capTimeOpts[5]  = {2, 3, 5, 10, 0};
         int teamTimeOpts[5] = {120, 180, 300, 600, 0};
 
-        // Game Constants
-        const int timeToCap;    // The time necessary to capture the control point (in seconds)
-        const int timePerTeam;  // The initial time that each team is given (in minutes)
+        // Game Option Variables
+        int timeToCap;    // The time necessary to capture the control point (in seconds)
+        int timePerTeam;  // The initial time that each team is given (in minutes)
 
         // Game State Variables
         int redTime, bluTime;   // Stores the times of the 2 teams

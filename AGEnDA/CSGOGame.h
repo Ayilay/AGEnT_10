@@ -37,10 +37,10 @@ class CSGOGame : public Game
         int defTimeOpts[5]  = {2, 3, 5, 10, 0};
         int boomTimeOpts[6] = {35, 45, 60, 90, 120, 0};
 
-        // Game Constants
-        const int armTime;          // Time it takes to arm the bomb (seconds)
-        const int defuseTime;       // Time it takes to defuse the bomb (seconds)
-        const String password;      // The password that shows up on the screen while the bomb is arming
+        // Game Option Variables
+        int armTime;          // Time it takes to arm the bomb (seconds)
+        int defuseTime;       // Time it takes to defuse the bomb (seconds)
+        String password;      // The password that shows up on the screen while the bomb is arming
 
         // Game State Variables
         int timeUntilBoom;          // Time since armed until the bomb explodes (seconds)
