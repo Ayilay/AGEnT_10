@@ -42,10 +42,7 @@ int MenuManager::displayMainMenu()
 
     while (true)
     {
-        // Update the LEDs in a sinusoidal fashion for fanciness
-        int brightness = 101 + 100 * sin(TimeManager::getTime() * 2.0 * PI / 2500.0);
-        analogWrite(HardwareMap::ledRED, brightness);
-        analogWrite(HardwareMap::ledBLU, brightness);
+        updateLEDs();
 
         // Display everything on the screen
         lcd->clear();
@@ -106,6 +103,8 @@ void MenuManager::displayGameMenu(int selectedGameID)
     GameOption* options = selectedGame->getGameOptions();
     while (true)
     {
+        updateLEDs();
+
         lcd->clear();
 
         lcd->print("Options for ");
@@ -176,6 +175,8 @@ void MenuManager::displaySettingTweakMenu(int gameID, int settingID)
     // Display the options and scroll through them using the encoder
     while (true)
     {
+        updateLEDs();
+
         lcd->clear();
         lcd->setCursor((HardwareMap::numLCDCols - option.optionName.length()) / 2, 0);
         lcd->print(option.optionName);
@@ -257,4 +258,12 @@ String MenuManager::formatSecondsToMMSS(int seconds)
     result += sec;
 
     return result;
+}
+
+// Update the LEDs in a sinusoidal fashion for fanciness
+void MenuManager::updateLEDs()
+{
+    int brightness = 101 + 100 * sin(TimeManager::getTime() * 2.0 * PI / 2500.0);
+    analogWrite(HardwareMap::ledRED, brightness);
+    analogWrite(HardwareMap::ledBLU, brightness);
 }

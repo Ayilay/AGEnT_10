@@ -30,6 +30,9 @@ class MenuManager
         void displaySettingTweakMenu(int gameID, int settingID);
         String formatSecondsToMMSS(int seconds);
 
+        // Update the Menu LEDs for fanciness
+        void updateLEDs();
+
     public:
         MenuManager();
 
