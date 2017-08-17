@@ -151,6 +151,8 @@ void KOTHGame::updateDisplay(unsigned long globalTime)
         else
         {
             lcd->print("Capture the Point!");
+            digitalWrite(HardwareMap::ledRED, LOW);
+            digitalWrite(HardwareMap::ledBLU, LOW);
         }
     }
 
