@@ -29,6 +29,7 @@ Any suggestions for game modes are welcome. I have tried to make adding a game m
 6) Add your own settings and initialize them in the constructor of your gamemode. Make sure your "option parameters" array ends with a 0. Make sure to define your own GameOption array in the header file and return it in the source file
 
 ## Current TODO/Wish List
+- [ ] *Re-Structure entire code to use an RTOS*
 - [x] Add settings for each Game Mode that are accessible at boot time
 - [ ] Remember settings accross boot (still wondering about this one)
 - [ ] Add javadocs-style documentation to everything
